@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import uz.optimit.taxi.entity.AutoModel;
 import uz.optimit.taxi.entity.Car;
-import uz.optimit.taxi.entity.Seat;
 import uz.optimit.taxi.entity.User;
 import uz.optimit.taxi.entity.api.ApiResponse;
 import uz.optimit.taxi.exception.CarNotFound;
@@ -18,7 +17,6 @@ import uz.optimit.taxi.repository.CarRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static uz.optimit.taxi.entity.Enum.Constants.*;
@@ -40,14 +38,13 @@ public class CarService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse addCar(CarRegisterRequestDto carRegisterRequestDto) {
         User user = userService.checkUserExistByContext();
-        Car car = from(carRegisterRequestDto, user);
-        carRepository.save(car);
+        from(carRegisterRequestDto, user);
         return new ApiResponse(SUCCESSFULLY, true);
     }
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse disActiveCarList() {
-        List<Car> allByActive = carRepository.findAllByActive(false);
+        List<Car> allByActive = carRepository.findAllByActiveFalse();
         List<CarResponseDto> carResponseDtoList = new ArrayList<>();
         allByActive.forEach(car -> carResponseDtoList.add(CarResponseDto.from(car, attachmentService.attachUploadFolder)));
         return new ApiResponse(carResponseDtoList, true);
@@ -56,16 +53,14 @@ public class CarService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getCarById(UUID carId) {
         Car car = carRepository.findById(carId).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
-        CarResponseDto carResponseDto = CarResponseDto.from(car, attachmentService.attachUploadFolder);
-        return new ApiResponse(carResponseDto, true);
+        return new ApiResponse(CarResponseDto.from(car, attachmentService.attachUploadFolder), true);
     }
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getCar() {
         User user = userService.checkUserExistByContext();
-        Car car = carRepository.findByUserIdAndActive(user.getId(),true).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
-        CarResponseDto carResponseDto = CarResponseDto.from(car, attachmentService.attachUploadFolder);
-        return new ApiResponse(carResponseDto, true);
+        Car car = carRepository.findByUserIdAndActiveTrue(user.getId()).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
+        return new ApiResponse(CarResponseDto.from(car, attachmentService.attachUploadFolder), true);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -79,7 +74,7 @@ public class CarService {
 
     public ApiResponse getCarSeat() {
         User user = userService.checkUserExistByContext();
-        Car car = carRepository.findByUserIdAndActive(user.getId(),true).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
+        Car car = carRepository.findByUserIdAndActiveTrue(user.getId()).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
         List<SeatResponse> seatResponses = new ArrayList<>();
         car.getSeatList().forEach(seat -> seatResponses.add(SeatResponse.from(seat)));
         return new ApiResponse(seatResponses, true);
@@ -95,13 +90,11 @@ public class CarService {
         car.setAutoPhotos(attachmentService.saveToSystemListFile(carRegisterRequestDto.getAutoPhotos()));
         car.setUser(user);
         Car save = carRepository.save(car);
-        List<Seat> carSeats = null;
         if (carRegisterRequestDto.getCountSeat() == 0) {
-            carSeats = seatService.createCarSeats(autoModel1.getCountSeat(), save);
+            seatService.createCarSeats(autoModel1.getCountSeat(), save);
         } else {
-            carSeats = seatService.createCarSeats(carRegisterRequestDto.getCountSeat(), save);
+            seatService.createCarSeats(carRegisterRequestDto.getCountSeat(), save);
         }
-        save.setSeatList(carSeats);
         return save;
     }
 

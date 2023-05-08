@@ -91,7 +91,7 @@ public class SmsService {
                 token = reFreshToken(token);
                 HttpHeaders headers1 = request.getHeaders();
                 headers1.setBearerAuth(token);
-                ResponseEntity<String> response = restTemplate.postForEntity(SMS_SEND, request, String.class);
+                restTemplate.postForEntity(SMS_SEND, request, String.class);
             } catch (Exception e1) {
                 throw new SmsSendingFailException(CAN_NOT_SEND_SMS);
             }

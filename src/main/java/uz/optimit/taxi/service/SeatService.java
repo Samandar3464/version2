@@ -19,7 +19,7 @@ import java.util.UUID;
 public class SeatService {
      private final SeatRepository seatRepository;
 
-    public List<Seat> createCarSeats(byte count , Car car){
+    public void createCarSeats(byte count , Car car){
           List<Seat> seatList  = new ArrayList<>();
           for (byte i = 1; i <= count; i++) {
                seatList.add(seatRepository.save(
@@ -29,7 +29,6 @@ public class SeatService {
                        .car(car)
                        .build()));
           }
-          return seatList;
      }
 
      @ResponseStatus(HttpStatus.CREATED)

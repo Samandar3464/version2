@@ -32,7 +32,7 @@ public class AnnouncementPassengerFamiliar {
      @PostMapping("/getFamiliarListByIdList")
      @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
      public ApiResponse getListByIds(@RequestBody List<UUID> list) {
-          return announcementFamiliarService.getFamiliarListByUserId(list);
+          return announcementFamiliarService.getFamiliarListById(list);
      }
 
      @DeleteMapping("/delete/{id}")

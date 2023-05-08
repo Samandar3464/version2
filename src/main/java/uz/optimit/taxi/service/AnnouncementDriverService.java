@@ -52,7 +52,7 @@ public class AnnouncementDriverService {
           if (byUserIdAndActive.isPresent()) {
                throw new AnnouncementAlreadyExistException(YOU_ALREADY_HAVE_ACTIVE_ANNOUNCEMENT);
           }
-          Car car = carRepository.findByUserIdAndActive(user.getId(), true).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
+          Car car = carRepository.findByUserIdAndActiveTrue(user.getId()).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
           AnnouncementDriver announcementDriver = null;
 
           if (announcementDriverRegisterRequestDto.getFromCityId()==null){
@@ -79,7 +79,7 @@ public class AnnouncementDriverService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getDriverById(UUID id) {
         AnnouncementDriver announcementDriver = repository.findByIdAndActive(id,true).orElseThrow(() -> new AnnouncementNotFoundException(ANNOUNCEMENT_NOT_FOUND));
-        Car car = carRepository.findByUserIdAndActive(announcementDriver.getUser().getId(), true).orElseThrow(() ->
+        Car car = carRepository.findByUserIdAndActiveTrue(announcementDriver.getUser().getId()).orElseThrow(() ->
                 new CarNotFound(CAR_NOT_FOUND));
         List<Notification> notifications = notificationRepository.findByAnnouncementDriverIdAndActiveAndReceived(announcementDriver.getId(), false, true);
         List<Familiar> familiars = new ArrayList<>();
@@ -92,7 +92,7 @@ public class AnnouncementDriverService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getById(UUID id) {
         AnnouncementDriver announcementDriver = repository.findById(id).orElseThrow(() -> new AnnouncementNotFoundException(ANNOUNCEMENT_NOT_FOUND));
-        Car car = carRepository.findByUserIdAndActive(announcementDriver.getUser().getId(), true).orElseThrow(() ->
+        Car car = carRepository.findByUserIdAndActiveTrue(announcementDriver.getUser().getId()).orElseThrow(() ->
                 new CarNotFound(CAR_NOT_FOUND));
         List<Notification> notifications = notificationRepository.findByAnnouncementDriverIdAndActiveAndReceived(announcementDriver.getId(), false, true);
         List<Familiar> familiars = new ArrayList<>();

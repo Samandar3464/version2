@@ -172,8 +172,8 @@ public class UserService {
         User user = userRepository.findByCarsIn(carList).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         List<Role> roles = user.getRoles();
         Role byName = roleRepository.findByName(DRIVER);
-        if (!roles.contains(byName)) {
-            roles.add((roleRepository.findByName(DRIVER)));
+        if (!user.getRoles().contains(byName)) {
+            roles.add((byName));
         }
         userRepository.save(user);
     }

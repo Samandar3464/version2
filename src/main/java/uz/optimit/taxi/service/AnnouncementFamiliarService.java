@@ -13,6 +13,7 @@ import uz.optimit.taxi.model.request.FamiliarRegisterRequestDto;
 import uz.optimit.taxi.repository.FamiliarRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static uz.optimit.taxi.entity.Enum.Constants.*;
@@ -22,16 +23,18 @@ import static uz.optimit.taxi.entity.Enum.Constants.*;
 public class AnnouncementFamiliarService {
 
      private final UserService userService;
+
      private final FamiliarRepository familiarRepository;
 
      @ResponseStatus(HttpStatus.CREATED)
      public ApiResponse addForFamiliar(FamiliarRegisterRequestDto familiarRegisterRequestDto) {
           User user = userService.checkUserExistByContext();
-          if (familiarRepository.existsByPhoneAndUserIdAndActive(familiarRegisterRequestDto.getPhone(), user.getId(), true)) {
+          Optional<Familiar> familiar = familiarRepository.findByPhoneAndUserId(familiarRegisterRequestDto.getPhone(), user.getId());
+          if (familiar.isPresent() && familiar.get().isActive()) {
                throw new UserAlreadyExistException(FAMILIAR_ALREADY_EXIST);
           }
-          if (familiarRepository.existsByPhoneAndUserIdAndActive(familiarRegisterRequestDto.getPhone(), user.getId(),false)) {
-               toActive(familiarRegisterRequestDto, user);
+          if (familiar.isPresent() && !familiar.get().isActive()) {
+               toActive(familiar.get(),familiarRegisterRequestDto);
           }
           familiarRepository.save(Familiar.from(familiarRegisterRequestDto, user));
           return new ApiResponse(SUCCESSFULLY, true);
@@ -40,14 +43,12 @@ public class AnnouncementFamiliarService {
      @ResponseStatus(HttpStatus.OK)
      public ApiResponse getFamiliarListByUser() {
           User user = userService.checkUserExistByContext();
-          List<Familiar> familiarList = familiarRepository.findAllByUserIdAndActive(user.getId(), true);
-          return new ApiResponse(SUCCESSFULLY, true, familiarList);
+          return new ApiResponse(SUCCESSFULLY, true, familiarRepository.findAllByUserIdAndActive(user.getId(), true));
      }
 
      @ResponseStatus(HttpStatus.OK)
-     public ApiResponse getFamiliarListByUserId(List<UUID> uuidList) {
-          List<Familiar> familiarList = familiarRepository.findByIdInAndActive(uuidList, true);
-          return new ApiResponse(SUCCESSFULLY, true, familiarList);
+     public ApiResponse getFamiliarListById(List<UUID> uuidList) {
+          return new ApiResponse(SUCCESSFULLY, true, familiarRepository.findByIdInAndActive(uuidList, true));
      }
 
      @ResponseStatus(HttpStatus.OK)
@@ -58,8 +59,7 @@ public class AnnouncementFamiliarService {
           return new ApiResponse(DELETED, true);
      }
 
-     private void toActive(FamiliarRegisterRequestDto familiarRegisterRequestDto, User user) {
-          Familiar familiar = familiarRepository.findFirstByUserIdAndPhone(user.getId(), familiarRegisterRequestDto.getPhone());
+     private void toActive(Familiar familiar,FamiliarRegisterRequestDto familiarRegisterRequestDto) {
           familiar.setActive(true);
           familiar.setAge(familiarRegisterRequestDto.getAge());
           familiar.setName(familiarRegisterRequestDto.getName());

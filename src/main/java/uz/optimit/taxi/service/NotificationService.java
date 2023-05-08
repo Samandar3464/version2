@@ -164,7 +164,7 @@ public class NotificationService {
         AnnouncementPassenger announcementPassenger = getAnnouncementPassenger(fromDriverToUser);
         AnnouncementDriver announcementDriver = getAnnouncementDriver(driver);
         List<Car> activeCars = new ArrayList<>();
-        driver.getCars().forEach(car -> activeCars.add(carRepository.findByUserIdAndActive(driver.getId(), true).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND))));
+        driver.getCars().forEach(car -> activeCars.add(carRepository.findByUserIdAndActiveTrue(driver.getId()).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND))));
         List<Seat> driverCarSeatList = activeCars.get(0).getSeatList();
         int countActiveSeat = 0;
         for (Seat seat : driverCarSeatList) {
@@ -208,7 +208,7 @@ public class NotificationService {
         AnnouncementPassenger announcementPassenger = getAnnouncementPassenger(passenger);
 
         List<Car> activeCars = new ArrayList<>();
-        driver.getCars().forEach(car -> activeCars.add(carRepository.findByUserIdAndActive(driver.getId(), true).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND))));
+        driver.getCars().forEach(car -> activeCars.add(carRepository.findByUserIdAndActiveTrue(driver.getId()).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND))));
         Car car = activeCars.get(0);
 
         List<Seat> driverCarSeatList = seatRepository.findAllByCarIdAndActive(car.getId(), true);
