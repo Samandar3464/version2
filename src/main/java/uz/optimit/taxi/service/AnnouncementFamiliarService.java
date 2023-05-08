@@ -13,7 +13,6 @@ import uz.optimit.taxi.model.request.FamiliarRegisterRequestDto;
 import uz.optimit.taxi.repository.FamiliarRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static uz.optimit.taxi.entity.Enum.Constants.*;

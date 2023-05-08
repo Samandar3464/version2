@@ -3,10 +3,12 @@ package uz.optimit.taxi.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import uz.optimit.taxi.entity.AutoCategory;
 
-import java.util.Optional;
+import java.util.List;
 
 
 public interface AutoCategoryRepository extends JpaRepository<AutoCategory, Integer> {
 
-    Optional<AutoCategory> findByName(String name);
+    boolean existsByName(String name);
+
+    List<AutoCategory> findAllByActiveTrue();
 }

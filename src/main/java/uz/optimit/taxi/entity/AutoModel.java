@@ -3,8 +3,8 @@ package uz.optimit.taxi.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import uz.optimit.taxi.model.request.AutoModelRegisterRequestDto;
 
-import java.util.List;
 
 @Getter
 @Setter
@@ -25,13 +25,23 @@ public class AutoModel {
 
     private byte countSeat;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "autoModel")
-    private List<Car> car;
+    private boolean active;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "autoModel")
+//    private List<Car> car;
 
-    public AutoModel(String name, byte countSeat,AutoCategory autoCategory) {
+    public AutoModel(String name, byte countSeat, AutoCategory autoCategory, boolean active) {
         this.name = name;
         this.countSeat = countSeat;
         this.autoCategory = autoCategory;
+        this.active = active;
+    }
+
+    public static AutoModel from(AutoModelRegisterRequestDto autoModelRegisterRequestDto, AutoCategory autoCategory) {
+        return AutoModel.builder()
+                .name(autoModelRegisterRequestDto.getName())
+                .countSeat(autoModelRegisterRequestDto.getCountSeat())
+                .autoCategory(autoCategory)
+                .build();
     }
 }

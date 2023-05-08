@@ -30,10 +30,6 @@ public class AttachmentService {
     @Value("${attach.upload.folder}")
     public String attachUploadFolder;
 
-    @Value("${attach.download.url}")
-    public String attachDownloadUrl;
-
-
     public String getYearMonthDay() {
         int year = LocalDate.now().getYear();
         int month = LocalDate.now().getMonthValue();
@@ -94,9 +90,9 @@ public class AttachmentService {
 
     public String getUrl(Attachment attachment) {
         if (attachment!=null){
-            return attachDownloadUrl + attachment.getPath() + "/" + attachment.getNewName() + "." + attachment.getType();
+            return attachUploadFolder + attachment.getPath() + "/" + attachment.getNewName() + "." + attachment.getType();
         }else {
-            return attachDownloadUrl+"avatar.png";
+            return attachUploadFolder+"avatar.png";
         }
     }
 

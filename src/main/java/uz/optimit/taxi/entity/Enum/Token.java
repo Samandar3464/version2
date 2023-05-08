@@ -1,4 +1,4 @@
-package uz.optimit.taxi.entity;
+package uz.optimit.taxi.entity.Enum;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,7 @@ public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
     @Column(columnDefinition="TEXT")
     private String token;
 }

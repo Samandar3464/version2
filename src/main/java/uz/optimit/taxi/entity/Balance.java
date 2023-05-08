@@ -2,6 +2,7 @@ package uz.optimit.taxi.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import uz.optimit.taxi.entity.User;
 
 import java.util.UUID;
 
@@ -11,23 +12,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Attachment  {
+public class Balance {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private String originName;
+    private boolean balance;
 
-    private long size;
-
-    private String newName;
-
-    private String type;
-
-    private String contentType;
-
-    private String path;
-
-    @ManyToOne
-    private Car car;
+    private boolean createdDate;
+    @OneToOne
+    private User user;
 }

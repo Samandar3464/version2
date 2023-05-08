@@ -12,8 +12,6 @@ import uz.optimit.taxi.model.request.CityRequestDto;
 import uz.optimit.taxi.repository.CityRepository;
 import uz.optimit.taxi.repository.RegionRepository;
 
-import java.util.Optional;
-
 import static uz.optimit.taxi.entity.Enum.Constants.*;
 
 @Service
@@ -22,18 +20,14 @@ public class CityService {
 
      private final CityRepository cityRepository;
 
-     private final RegionRepository repository;
+     private final RegionRepository regionRepository;
 
      @ResponseStatus(HttpStatus.CREATED)
      public ApiResponse saveCity(CityRequestDto cityRequestDto) {
-          Optional<City> byName = cityRepository.findByNameAndRegionId(cityRequestDto.getName(),cityRequestDto.getRegionId());
-          if (byName.isPresent()) {
+          if (cityRepository.existsByNameAndRegionId(cityRequestDto.getName(),cityRequestDto.getRegionId())) {
                throw new RecordAlreadyExistException(CITY_ALREADY_EXIST);
           }
-
-          City city = City.builder()
-              .name(cityRequestDto.getName()).region(repository.findById(cityRequestDto.getRegionId()).orElseThrow(()->new RecordNotFoundException(REGION_NOT_FOUND))).build();
-
+          City city = City.from(cityRequestDto, regionRepository.findById(cityRequestDto.getRegionId()).orElseThrow(() -> new RecordNotFoundException(REGION_NOT_FOUND)));
           City save = cityRepository.save(city);
           return new ApiResponse(SUCCESSFULLY, true,save);
      }

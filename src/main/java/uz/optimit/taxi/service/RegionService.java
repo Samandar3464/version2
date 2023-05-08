@@ -19,29 +19,26 @@ import static uz.optimit.taxi.entity.Enum.Constants.*;
 @Service
 @RequiredArgsConstructor
 public class RegionService {
+
     private final RegionRepository regionRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse addRegion(RegionRegisterRequestDto regionRegisterRequestDto) {
-        Optional<Region> byName = regionRepository.findByName(regionRegisterRequestDto.getName());
-        if (byName.isPresent()) {
+        if (regionRepository.existsByName(regionRegisterRequestDto.getName())) {
             throw new RecordAlreadyExistException(REGION_ALREADY_EXIST);
         }
-        Region region = Region.builder().name(regionRegisterRequestDto.getName()).build();
-        regionRepository.save(region);
+        regionRepository.save(Region.from(regionRegisterRequestDto));
         return new ApiResponse(SUCCESSFULLY , true);
     }
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getRegionList(){
-        List<Region> all = regionRepository.findAll();
-        return new ApiResponse(all,true);
+        return new ApiResponse(regionRepository.findAll(),true);
     }
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getRegionById(Integer id){
-        Region region = regionRepository.findById(id).orElseThrow(()->new RecordNotFoundException(REGION_NOT_FOUND));
-        return new ApiResponse(region,true);
+        return new ApiResponse(regionRepository.findById(id).orElseThrow(()->new RecordNotFoundException(REGION_NOT_FOUND)),true);
     }
 
     public ApiResponse deleteRegionById(Integer id) {

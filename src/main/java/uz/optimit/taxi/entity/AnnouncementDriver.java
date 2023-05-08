@@ -1,9 +1,6 @@
 package uz.optimit.taxi.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
 import jakarta.persistence.*;
 import lombok.*;
 import uz.optimit.taxi.model.request.AnnouncementDriverRegisterRequestDto;
@@ -29,6 +26,16 @@ public class AnnouncementDriver {
 
      private double backSeatPrice;
 
+     private boolean baggage;
+
+     private boolean active;
+
+     private LocalDateTime timeToDrive;
+
+     private LocalDateTime createdTime;
+
+     private String info;
+
      @ManyToOne
      private Region fromRegion;
 
@@ -41,22 +48,13 @@ public class AnnouncementDriver {
      @ManyToOne
      private City toCity;
 
-
      @ManyToOne
      private User user;
 
      @ManyToOne
      private Car car;
 
-     private boolean baggage;
 
-     private boolean active;
-
-     private LocalDateTime timeToDrive;
-
-     private LocalDateTime createdTime;
-
-     private String info;
 
      public static AnnouncementDriver from(AnnouncementDriverRegisterRequestDto announcementRequestDto, User user, RegionRepository regionRepository, CityRepository cityRepository, Car car) {
           return AnnouncementDriver.builder()

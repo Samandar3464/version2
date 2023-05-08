@@ -24,18 +24,20 @@ public class Status {
     private Long count;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "status")
+    @OneToOne
     private User user;
 
-    public Status(int stars, int count) {
-
+    public Status(int stars, int count, User user) {
+        this.stars = (long) stars;
+        this.count = (long) count;
+        this.user = user;
     }
 
-    public static Status from(StatusDto statusDto, Status status){
+    public static Status from(StatusDto statusDto, Status status) {
         return Status.builder()
                 .id(status.getId())
-                .stars(status.getStars()+statusDto.getStars())
-                .count(status.getCount()+1)
+                .stars(status.getStars() + statusDto.getStars())
+                .count(status.getCount() + 1)
                 .build();
     }
 }

@@ -11,12 +11,10 @@ import uz.optimit.taxi.exception.AnnouncementAlreadyExistException;
 import uz.optimit.taxi.exception.AnnouncementAvailable;
 import uz.optimit.taxi.exception.AnnouncementNotFoundException;
 import uz.optimit.taxi.model.request.AnnouncementPassengerRegisterRequestDto;
-import uz.optimit.taxi.model.response.AnnouncementDriverResponse;
 import uz.optimit.taxi.model.response.AnnouncementPassengerResponse;
 import uz.optimit.taxi.model.response.AnnouncementPassengerResponseAnonymous;
 import uz.optimit.taxi.repository.*;
 import uz.optimit.taxi.model.response.UserResponseDto;
-import uz.optimit.taxi.repository.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -68,7 +66,7 @@ public class AnnouncementPassengerService {
     public ApiResponse getAnnouncementById(UUID id) {
         AnnouncementPassenger active = repository.findByIdAndActive(id, true).orElseThrow(() -> new AnnouncementNotFoundException(ANNOUNCEMENT_NOT_FOUND));
         User user = userService.checkUserExistById(active.getUser().getId());
-        UserResponseDto userResponseDto = UserResponseDto.from(user, attachmentService.attachDownloadUrl, announcementPassengerRepository);
+        UserResponseDto userResponseDto = UserResponseDto.from(user, attachmentService.attachUploadFolder, announcementPassengerRepository);
         AnnouncementPassengerResponse passengerResponse =
                 AnnouncementPassengerResponse.from(active, userResponseDto);
         return new ApiResponse(passengerResponse, true);
@@ -78,7 +76,7 @@ public class AnnouncementPassengerService {
     public ApiResponse getById(UUID id) {
         AnnouncementPassenger active = repository.findById(id).orElseThrow(() -> new AnnouncementNotFoundException(ANNOUNCEMENT_NOT_FOUND));
         User user = userService.checkUserExistById(active.getUser().getId());
-        UserResponseDto userResponseDto = UserResponseDto.fromDriver(user, attachmentService.attachDownloadUrl);
+        UserResponseDto userResponseDto = UserResponseDto.fromDriver(user, attachmentService.attachUploadFolder);
         AnnouncementPassengerResponse passengerResponse =
                 AnnouncementPassengerResponse.from(active, userResponseDto);
         return new ApiResponse(passengerResponse, true);
@@ -132,7 +130,7 @@ public class AnnouncementPassengerService {
         List<AnnouncementPassengerResponse> response = new ArrayList<>();
 
         UserResponseDto userResponseDto = UserResponseDto.from(userService.checkUserExistById(user.getId()),
-                attachmentService.attachDownloadUrl, announcementPassengerRepository);
+                attachmentService.attachUploadFolder, announcementPassengerRepository);
 
         allByActive.forEach((announcementPassenger) -> response.add(AnnouncementPassengerResponse
                 .from(announcementPassenger,userResponseDto )));

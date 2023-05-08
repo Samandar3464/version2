@@ -31,6 +31,7 @@ import static uz.optimit.taxi.entity.Enum.Constants.PASSENGER;
 @Entity
 @Table(name = "Users")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -54,7 +55,7 @@ public class User implements UserDetails {
 
     private String fireBaseToken;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private Status status;
 
     private Integer verificationCode;
@@ -70,7 +71,6 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
     private List<Role> roles;
 
-//    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Car> cars;
 
@@ -88,6 +88,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Notification> notifications;
+
+    @OneToOne(mappedBy = "user")
+    private Balance balance;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
@@ -123,7 +126,7 @@ public class User implements UserDetails {
 
     public static User fromPassenger(UserRegisterDto userRegisterDto, PasswordEncoder passwordEncoder,
                                      AttachmentService attachmentService, Integer verificationCode ,
-                                     RoleRepository roleRepository ,Status status){
+                                     RoleRepository roleRepository){
        Attachment attachment= new Attachment();
         if (userRegisterDto.getProfilePhoto()==null){
             attachment=null;
@@ -142,7 +145,6 @@ public class User implements UserDetails {
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
 //                .roles(List.of(roleRepository.findByName(PASSENGER)))
                 .roles(List.of(roleRepository.findByName(PASSENGER),roleRepository.findByName(DRIVER)))
-                .status(status)
                 .isBlocked(true)
                 .build();
     }

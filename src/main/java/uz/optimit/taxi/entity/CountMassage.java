@@ -22,8 +22,11 @@ public class CountMassage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     private String phone;
+
     private int count;
+
     private LocalDateTime  sandedTime;
 
     public CountMassage(String phone, int count,LocalDateTime sandedTime) {

@@ -9,7 +9,6 @@ import uz.optimit.taxi.entity.Enum.Gender;
 import uz.optimit.taxi.model.request.FamiliarRegisterRequestDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -36,15 +35,12 @@ public class Familiar {
     private short age;
 
     private double status;
+
     private boolean active;
 
     @ManyToOne
     @JsonIgnore
     private User user;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy ="passengersList")
-    private List<AnnouncementPassenger> announcementPassenger;
 
     public static Familiar from(FamiliarRegisterRequestDto registerRequestDto, User user) {
         return Familiar.builder()

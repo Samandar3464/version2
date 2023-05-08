@@ -12,6 +12,7 @@ public class Constants {
     public static final String FILE_COULD_NOT_UPLOADED="FILE COULD NOT UPLOADED";
     public static final String FILE_NOT_FOUND="FILE NOT FOUND";
     public static final String AUTO_CATEGORY_ALREADY_EXIST="AUTO CATEGORY ALREADY EXIST";
+    public static final String AUTO_CATEGORY_NOT_FOUND="AUTO CATEGORY NOT FOUND";
     public static final String AUTO_MODEL_ALREADY_EXIST="AUTO MODEL ALREADY EXIST";
     public static final String AUTO_MODEL_NOT_FOUND="AUTO MODEL NOT FOUND";
     public static final String REGION_ALREADY_EXIST="REGION ALREADY EXIST";

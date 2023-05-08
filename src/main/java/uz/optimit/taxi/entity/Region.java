@@ -3,6 +3,7 @@ package uz.optimit.taxi.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import uz.optimit.taxi.model.request.RegionRegisterRequestDto;
 
 import java.util.List;
 
@@ -20,19 +21,19 @@ public class Region {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "region")
-    private List<City> cities;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "fromRegion")
-    private List<AnnouncementPassenger> fromAnnouncementUser;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "toRegion")
-    private List<AnnouncementPassenger> toAnnouncementUser;
-
-    public Region(Integer id, String name) {
-        this.id = id;
-        this.name = name;
+    public static Region from(RegionRegisterRequestDto regionRegisterRequestDto){
+        return Region.builder().name(regionRegisterRequestDto.getName()).build();
     }
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "fromRegion")
+//    private List<AnnouncementPassenger> fromAnnouncementUser;
+//
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "toRegion")
+//    private List<AnnouncementPassenger> toAnnouncementUser;
+
+//    public Region(Integer id, String name) {
+//        this.id = id;
+//        this.name = name;
+//    }
 }

@@ -22,18 +22,15 @@ import static uz.optimit.taxi.entity.Enum.Constants.*;
 public class AutoModelService {
 
     private final AutoModelRepository autoModelRepository;
+
     private final AutoCategoryRepository autoCategoryRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse addAutoCategory(AutoModelRegisterRequestDto autoModelRegisterRequestDto) {
-        Optional<AutoModel> byName = autoModelRepository.findByNameAndAutoCategoryId(autoModelRegisterRequestDto.getName(), autoModelRegisterRequestDto.getCategoryId());
-        if (byName.isPresent()) {
+        if (autoModelRepository.existsByNameAndAutoCategoryId(autoModelRegisterRequestDto.getName(), autoModelRegisterRequestDto.getCategoryId())) {
             throw new RecordAlreadyExistException(AUTO_MODEL_ALREADY_EXIST);
         }
-        AutoModel autoModel = AutoModel.builder()
-                .name(autoModelRegisterRequestDto.getName())
-                .countSeat(autoModelRegisterRequestDto.getCountSeat())
-                .autoCategory(autoCategoryRepository.getById(autoModelRegisterRequestDto.getCategoryId())).build();
+        AutoModel autoModel = AutoModel.from(autoModelRegisterRequestDto, autoCategoryRepository.getById(autoModelRegisterRequestDto.getCategoryId()));
         autoModelRepository.save(autoModel);
         return new ApiResponse(SUCCESSFULLY, true);
     }
@@ -43,12 +40,14 @@ public class AutoModelService {
     }
 
     public ApiResponse getModelList(int categoryId) {
-        List<AutoModel> allByAutoCategoryId = autoModelRepository.findAllByAutoCategoryId(categoryId);
+        List<AutoModel> allByAutoCategoryId = autoModelRepository.findAllByAutoCategoryIdAndActiveTrue(categoryId);
         return new ApiResponse(allByAutoCategoryId, true);
     }
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse deleteModelById(int id) {
-        autoModelRepository.deleteById(id);
+        AutoModel autoModel = autoModelRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(AUTO_MODEL_NOT_FOUND));
+        autoModel.setActive(false);
+        autoModelRepository.save(autoModel);
         return new ApiResponse(DELETED,true);
     }
 }

@@ -13,7 +13,7 @@ import uz.optimit.taxi.exception.SmsServiceBroken;
 import uz.optimit.taxi.model.request.SmsModel;
 import uz.optimit.taxi.model.response.SmsResponse;
 import uz.optimit.taxi.model.SmsToken;
-import uz.optimit.taxi.entity.Token;
+import uz.optimit.taxi.entity.Enum.Token;
 import uz.optimit.taxi.repository.TokenRepository;
 
 import java.util.HashMap;
@@ -26,7 +26,6 @@ import static uz.optimit.taxi.entity.Enum.Constants.CAN_NOT_TAKE_SMS_SENDING_SER
 @Service
 @RequiredArgsConstructor
 public class SmsService {
-
 
     private final TokenRepository tokenRepository;
 
@@ -70,7 +69,6 @@ public class SmsService {
         HttpHeaders headers = new HttpHeaders();
         String token = null;
         try {
-
             headers.setContentType(MediaType.APPLICATION_JSON);
             List<Token> all = tokenRepository.findAll();
             if (!all.isEmpty()) {

@@ -42,6 +42,7 @@ public class Notification {
 
     @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
+
     @ManyToMany
     private List<Seat> carSeats;
 

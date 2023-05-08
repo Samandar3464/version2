@@ -67,13 +67,11 @@ public class UserService {
 //                .build());
         countMassageRepository.save(new CountMassage(userRegisterDto.getPhone(),1,LocalDateTime.now()));
         System.out.println("verificationCode = " + verificationCode);
-        Status status = statusRepository.save(new Status(0, 0));
-        User user = User.fromPassenger(userRegisterDto, passwordEncoder, attachmentService, verificationCode, roleRepository, status);
+        User user = User.fromPassenger(userRegisterDto, passwordEncoder, attachmentService, verificationCode, roleRepository);
         User save = userRepository.save(user);
+        statusRepository.save(new Status(0, 0,save));
         familiarRepository.save(Familiar.fromUser(save));
-        String access = jwtGenerate.generateAccessToken(user);
-        String refresh = jwtGenerate.generateRefreshToken(user);
-        return new ApiResponse(SUCCESSFULLY, true, new TokenResponse(access, refresh, UserResponseDto.fromDriver(user, attachmentService.attachDownloadUrl)));
+        return new ApiResponse(SUCCESSFULLY, true, new TokenResponse(JwtGenerate.generateAccessToken(user), JwtGenerate.generateRefreshToken(user), UserResponseDto.fromDriver(user, attachmentService.attachUploadFolder)));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -82,9 +80,7 @@ public class UserService {
             Authentication authentication = new UsernamePasswordAuthenticationToken(userLoginRequestDto.getPhone(), userLoginRequestDto.getPassword());
             Authentication authenticate = authenticationManager.authenticate(authentication);
             User user = (User) authenticate.getPrincipal();
-            String access = jwtGenerate.generateAccessToken(user);
-            String refresh = jwtGenerate.generateRefreshToken(user);
-            return new ApiResponse(new TokenResponse(access, refresh, UserResponseDto.fromDriver(user, attachmentService.attachDownloadUrl)), true);
+            return new ApiResponse(new TokenResponse(JwtGenerate.generateAccessToken(user), JwtGenerate.generateRefreshToken(user), UserResponseDto.fromDriver(user, attachmentService.attachUploadFolder)), true);
         } catch (BadCredentialsException e) {
             throw new UserNotFoundException(USER_NOT_FOUND);
         }
@@ -144,19 +140,15 @@ public class UserService {
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getByUserId(UUID id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-        return new ApiResponse(UserResponseDto.fromDriver(user, attachmentService.attachDownloadUrl), true);
+        User user = checkUserExistById(id);
+        return new ApiResponse(UserResponseDto.fromDriver(user, attachmentService.attachUploadFolder), true);
     }
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse setStatus(StatusDto statusDto) {
-        User user = userRepository.findById(statusDto.getUserId()).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-//        Optional<Status> statusOld = statusRepository.findByUserId(user.getId());
-//        Status status = Status.fromForDriver(statusDto,statusOld.get());
+        User user = checkUserExistById(statusDto.getUserId());
         Status status = Status.from(statusDto, user.getStatus());
-        Status save = statusRepository.save(status);
-        user.setStatus(save);
-        userRepository.save(user);
+        statusRepository.save(status);
         return new ApiResponse(SUCCESSFULLY, true);
     }
 
@@ -170,7 +162,7 @@ public class UserService {
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse saveFireBaseToken(FireBaseTokenRegisterDto fireBaseTokenRegisterDto) {
-        User user = userRepository.findById(fireBaseTokenRegisterDto.getUserId()).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+        User user = checkUserExistById(fireBaseTokenRegisterDto.getUserId());
         user.setFireBaseToken(fireBaseTokenRegisterDto.getFireBaseToken());
         userRepository.save(user);
         return new ApiResponse(SUCCESSFULLY, true);
@@ -186,16 +178,16 @@ public class UserService {
         userRepository.save(user);
     }
 
-//    private void countMassage() {
-//        List<CountMassage> all = countMassageRepository.findAll();
-//        if (all.isEmpty()) {
-//            countMassageRepository.save(CountMassage.builder().count(1L).build());
-//        } else {
-//            CountMassage countMassage = all.get(0);
-//            countMassage.setCount(countMassage.getCount() + 1);
-//            countMassageRepository.save(countMassage);
-//        }
-//    }
+    private void countMassage() {
+        List<CountMassage> all = countMassageRepository.findAll();
+        if (all.isEmpty()) {
+            countMassageRepository.save(CountMassage.builder().count(1).build());
+        } else {
+            CountMassage countMassage = all.get(0);
+            countMassage.setCount(countMassage.getCount() + 1);
+            countMassageRepository.save(countMassage);
+        }
+    }
 }
 
 

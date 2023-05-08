@@ -1,9 +1,5 @@
 package uz.optimit.taxi.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 import lombok.*;
 import uz.optimit.taxi.model.request.AnnouncementPassengerRegisterRequestDto;
@@ -22,21 +18,28 @@ import java.util.List;
 @Builder
 @Entity
 public class AnnouncementPassenger {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     @ManyToOne
     private Region fromRegion;
+
     @ManyToOne
     private Region toRegion;
 
     @ManyToOne
     private City fromCity;
+
     @ManyToOne
     private City toCity;
 
     @ManyToOne
     private User user;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Familiar> passengersList;
 
     private double fromLatitude;
 
@@ -45,9 +48,6 @@ public class AnnouncementPassenger {
     private double toLongitude;
 
     private double toLatitude;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Familiar> passengersList;
 
     private boolean baggage;
 

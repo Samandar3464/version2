@@ -86,7 +86,7 @@ public class AnnouncementDriverService {
         notifications.forEach(obj ->
                 familiars.addAll(announcementPassengerRepository.findByIdAndActive(obj.getAnnouncementPassengerId(), false)
                         .orElseThrow(() -> new AnnouncementNotFoundException(ANNOUNCEMENT_NOT_FOUND)).getPassengersList()));
-        AnnouncementDriverResponse announcementDriverResponse = AnnouncementDriverResponse.from(announcementDriver, car, familiars, attachmentService.attachDownloadUrl);
+        AnnouncementDriverResponse announcementDriverResponse = AnnouncementDriverResponse.from(announcementDriver, car, familiars, attachmentService.attachUploadFolder);
         return new ApiResponse(announcementDriverResponse, true);
     }
     @ResponseStatus(HttpStatus.OK)
@@ -99,7 +99,7 @@ public class AnnouncementDriverService {
         notifications.forEach(obj ->
                 familiars.addAll(announcementPassengerRepository.findByIdAndActive(obj.getAnnouncementPassengerId(), false)
                         .orElseThrow(() -> new AnnouncementNotFoundException(ANNOUNCEMENT_NOT_FOUND)).getPassengersList()));
-        AnnouncementDriverResponse announcementDriverResponse = AnnouncementDriverResponse.from(announcementDriver, car, familiars, attachmentService.attachDownloadUrl);
+        AnnouncementDriverResponse announcementDriverResponse = AnnouncementDriverResponse.from(announcementDriver, car, familiars, attachmentService.attachUploadFolder);
         return new ApiResponse(announcementDriverResponse, true);
     }
 
@@ -169,7 +169,7 @@ public class AnnouncementDriverService {
           List<AnnouncementDriverResponse> announcementDrivers = new ArrayList<>();
 
           driverList.forEach(announcementDriver -> {
-               announcementDrivers.add(AnnouncementDriverResponse.fromDriver(announcementDriver,announcementDriver.getCar(), attachmentService.attachDownloadUrl));
+               announcementDrivers.add(AnnouncementDriverResponse.fromDriver(announcementDriver,announcementDriver.getCar(), attachmentService.attachUploadFolder));
           });
           return new ApiResponse(announcementDrivers,true);
      }

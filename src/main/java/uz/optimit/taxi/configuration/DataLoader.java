@@ -32,12 +32,11 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) {
 
         if (initMode.equals("always")) {
-            if (roleRepository.findAll().isEmpty()) {
                 Role admim = new Role(1, ADMIN);
                 Role yolovchi = new Role(2, PASSENGER);
                 Role haydovchi = new Role(3, DRIVER);
                 roleRepository.saveAll(List.of(admim, yolovchi, haydovchi));
-            }
+
 
 //            if (!userRepository.existsByPhone("906163464")) {
 //                User admin = User.builder()
@@ -56,11 +55,6 @@ public class DataLoader implements CommandLineRunner {
 //                userRepository.save(admin);
 //            }
 
-
-            if (!regionRepository.existsByNameIn(List.of(
-                    "Toshkent shahri", "Toshkent viloyati", "Andijon", "Buxoro"
-                    , "Farg`ona", "Qoraqalpog‘iston", "Jizzax", "Navoiy", "Namangan"
-                    , "Samarqand", "Surxondaryo", "Sirdaryo", "Xorazm"))) {
                 List<Region> regions = List.of(
                         new Region(1, "Toshkent shahri")
                         , new Region(2, "Toshkent viloyati")
@@ -324,49 +318,49 @@ public class DataLoader implements CommandLineRunner {
                         new City("Qo‘shko‘pir t", save14));
 
                 cityRepository.saveAll(cities);
-            }
+
 
             List<AutoCategory> categories = List.of(
-                    new AutoCategory(1, "GM")
-                    , new AutoCategory(2, "BMW")
-                    , new AutoCategory(3, "Toyota")
-                    , new AutoCategory(4, "Volkswagen")
-                    , new AutoCategory(5, "Chevrolet")
-                    , new AutoCategory(6, "Ford")
-                    , new AutoCategory(7, "Mazda")
-                    , new AutoCategory(8, "Audi")
-                    , new AutoCategory(9, "Kia")
-                    , new AutoCategory(10, "Hyudai")
-                    , new AutoCategory(11, "Honda")
-                    , new AutoCategory(12, "Mercedes-Benz")
-                    , new AutoCategory(13, "Volvo")
-                    , new AutoCategory(14, "Daewoo")
-                    , new AutoCategory(15, "Lexus")
-                    , new AutoCategory(16, "Nissan")
-                    , new AutoCategory(17, "Opel")
-                    , new AutoCategory(18, "Tesla")
-                    , new AutoCategory(19, "Lada"));
+                    new AutoCategory(1, "GM",true)
+                    , new AutoCategory(2, "BMW",true)
+                    , new AutoCategory(3, "Toyota",true)
+                    , new AutoCategory(4, "Volkswagen",true)
+                    , new AutoCategory(5, "Chevrolet",true)
+                    , new AutoCategory(6, "Ford",true)
+                    , new AutoCategory(7, "Mazda",true)
+                    , new AutoCategory(8, "Audi",true)
+                    , new AutoCategory(9, "Kia",true)
+                    , new AutoCategory(10, "Hyudai",true)
+                    , new AutoCategory(11, "Honda",true)
+                    , new AutoCategory(12, "Mercedes-Benz",true)
+                    , new AutoCategory(13, "Volvo",true)
+                    , new AutoCategory(14, "Daewoo",true)
+                    , new AutoCategory(15, "Lexus",true)
+                    , new AutoCategory(16, "Nissan",true)
+                    , new AutoCategory(17, "Opel",true)
+                    , new AutoCategory(18, "Tesla",true)
+                    , new AutoCategory(19, "Lada",true));
             autoCategoryRepository.saveAll(categories);
             AutoCategory autoCategory1 = autoCategoryRepository.getById(1);
             AutoCategory autoCategory12 = autoCategoryRepository.getById(12);
 
-            AutoModel autoModel1 = new AutoModel("Damas", (byte) 4, autoCategory1);
-            AutoModel autoModel2 = new AutoModel("Cobalt", (byte) 4, autoCategory1);
-            AutoModel autoModel3 = new AutoModel("Lacetti-Gentra", (byte) 4, autoCategory1);
-            AutoModel autoModel4 = new AutoModel("Lacetti", (byte) 4, autoCategory1);
-            AutoModel autoModel5 = new AutoModel("Nexia autoCategory1", (byte) 4, autoCategory1);
-            AutoModel autoModel6 = new AutoModel("Nexia 2", (byte) 4, autoCategory1);
-            AutoModel autoModel7 = new AutoModel("Nexia 3", (byte) 4, autoCategory1);
-            AutoModel autoModel8 = new AutoModel("Spark", (byte) 4, autoCategory1);
-            AutoModel autoModel9 = new AutoModel("Matiz", (byte) 4, autoCategory1);
-            AutoModel autoModel10 = new AutoModel("Captiva", (byte) 6, autoCategory1);
-            AutoModel autoModel11 = new AutoModel("Epica", (byte) 4, autoCategory1);
-            AutoModel autoModel12 = new AutoModel("Malibu autoCategory1", (byte) 4, autoCategory1);
-            AutoModel autoModel13 = new AutoModel("Malibu 2", (byte) 4, autoCategory1);
-            AutoModel autoModel14 = new AutoModel("Orlando", (byte) 6, autoCategory1);
-            AutoModel autoModel15 = new AutoModel("Tracker", (byte) 4, autoCategory1);
-            AutoModel autoModel16 = new AutoModel("TrailBlazer", (byte) 6, autoCategory1);
-            AutoModel autoModel17 = new AutoModel("Equinox", (byte) 4, autoCategory1);
+            AutoModel autoModel1 = new AutoModel("Damas", (byte) 4, autoCategory1,true);
+            AutoModel autoModel2 = new AutoModel("Cobalt", (byte) 4, autoCategory1,true);
+            AutoModel autoModel3 = new AutoModel("Lacetti-Gentra", (byte) 4, autoCategory1,true);
+            AutoModel autoModel4 = new AutoModel("Lacetti", (byte) 4, autoCategory1,true);
+            AutoModel autoModel5 = new AutoModel("Nexia ", (byte) 4, autoCategory1,true);
+            AutoModel autoModel6 = new AutoModel("Nexia 2", (byte) 4, autoCategory1,true);
+            AutoModel autoModel7 = new AutoModel("Nexia 3", (byte) 4, autoCategory1,true);
+            AutoModel autoModel8 = new AutoModel("Spark", (byte) 4, autoCategory1,true);
+            AutoModel autoModel9 = new AutoModel("Matiz", (byte) 4, autoCategory1,true);
+            AutoModel autoModel10 = new AutoModel("Captiva", (byte) 6, autoCategory1,true);
+            AutoModel autoModel11 = new AutoModel("Epica", (byte) 4, autoCategory1,true);
+            AutoModel autoModel12 = new AutoModel("Malibu ", (byte) 4, autoCategory1,true);
+            AutoModel autoModel13 = new AutoModel("Malibu 2", (byte) 4, autoCategory1,true);
+            AutoModel autoModel14 = new AutoModel("Orlando", (byte) 6, autoCategory1,true);
+            AutoModel autoModel15 = new AutoModel("Tracker", (byte) 4, autoCategory1,true);
+            AutoModel autoModel16 = new AutoModel("TrailBlazer", (byte) 6, autoCategory1,true);
+            AutoModel autoModel17 = new AutoModel("Equinox", (byte) 4, autoCategory1,true);
 
             autoModelRepository.saveAll(List.of(autoModel1,
                     autoModel2, autoModel3, autoModel4,
@@ -375,8 +369,8 @@ public class DataLoader implements CommandLineRunner {
                     autoModel11, autoModel12, autoModel13,
                     autoModel14, autoModel15, autoModel16,
                     autoModel17));
-            AutoModel autoModel18 = new AutoModel("Gelik", (byte) 4, autoCategory12);
-            AutoModel autoModel19 = new AutoModel("G8", (byte) 4, autoCategory12);
+            AutoModel autoModel18 = new AutoModel("Gelik", (byte) 4, autoCategory12,true);
+            AutoModel autoModel19 = new AutoModel("G8", (byte) 4, autoCategory12,true);
             autoModelRepository.saveAll(List.of(autoModel18, autoModel19));
         }
     }

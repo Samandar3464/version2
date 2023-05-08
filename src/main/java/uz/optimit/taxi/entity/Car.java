@@ -42,8 +42,8 @@ public class Car {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
-    private List<AnnouncementDriver> announcementDriver;
+//    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+//    private List<AnnouncementDriver> announcementDriver;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<Seat> seatList;
