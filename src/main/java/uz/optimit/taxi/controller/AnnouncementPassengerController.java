@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.optimit.taxi.entity.api.ApiResponse;
 import uz.optimit.taxi.model.request.AnnouncementPassengerRegisterRequestDto;
+import uz.optimit.taxi.model.request.GetByFilter;
 import uz.optimit.taxi.service.AnnouncementPassengerService;
 
 import java.util.UUID;
@@ -50,13 +51,9 @@ public class AnnouncementPassengerController {
           return announcementPassengerService.deletePassengerAnnouncement(id);
      }
 
-     @GetMapping("/getAnnouncementPassengerByFilter/{fromRegion}/{toRegion}/{timeToTravel}")
-     public ApiResponse getAnnouncementPassengerByFilter(
-         @PathVariable Integer fromRegion,
-         @PathVariable Integer toRegion,
-         @PathVariable String timeToTravel
-     ) {
-          return announcementPassengerService.findFilter(fromRegion, toRegion, timeToTravel+" 00:01",timeToTravel+" 23:59");
+     @PostMapping("/getAnnouncementPassengerByFilter")
+     public ApiResponse getAnnouncementPassengerByFilter(@RequestBody GetByFilter getByFilter) {
+          return announcementPassengerService.getByFilter(getByFilter);
      }
 
      @GetMapping("/getPassengerAnnouncementHistory")

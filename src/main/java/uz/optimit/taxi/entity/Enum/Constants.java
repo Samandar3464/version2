@@ -6,7 +6,10 @@ public class Constants {
     public static final String TOKEN_TIME_OUT="TOKEN TIME OUT";
 
     public static final String SUCCESSFULLY="SUCCESSFULLY";
-    public static final String ANNOUNCEMENT_NOT_FOUND="ANNOUNCEMENT NOT FOUND";
+    public static final String DRIVER_ANNOUNCEMENT_NOT_FOUND="DRIVER ANNOUNCEMENT NOT FOUND";
+    public static final String PASSENGER_ANNOUNCEMENT_NOT_FOUND="PASSENGER ANNOUNCEMENT NOT FOUND";
+    public static final String ANNOUNCEMENT_PASSENGER_ALREADY_EXIST="ANNOUNCEMENT PASSENGER ALREADY EXIST";
+    public static final String ANNOUNCEMENT_DRIVER_ALREADY_EXIST="ANNOUNCEMENT DRIVER ALREADY EXIST";
     public static final String DELETED="DELETED";
     public static final String FILE_NAME_NULL="FILE NAME NULL";
     public static final String FILE_COULD_NOT_UPLOADED="FILE COULD NOT UPLOADED";
@@ -26,7 +29,6 @@ public class Constants {
     public static final String FAMILIAR_ALREADY_EXIST="FAMILIAR ALREADY EXIST";
     public static final String REGION_NOT_FOUND="REGION NOT FOUND";
     public static final String CITY_NOT_FOUND="CITY NOT FOUND";
-    public static final String YOU_ALREADY_HAVE_ACTIVE_ANNOUNCEMENT="YOU ALREADY HAVE ACTIVE ANNOUNCEMENT";
     public static final String YOU_COME_TO_MESSAGE_FROM_PASSENGER="SIZGA YO'LOVCHIDAN HABAR KELDI";
     public static final String YOU_COME_TO_MESSAGE_FROM_DRIVER="SIZGA HAYDOVCHIDAN HABAR KELDI";
     public static final String DRIVER_AGREE="Haydovchi sizni olib ketishga rozi bo'ldi.";
@@ -39,6 +41,7 @@ public class Constants {
     public static final String AUTHORITIES="authorities";
     public static final String AUTHORIZATION="Authorization";
     public static final String DRIVER="HAYDOVCHI";
+
     public static final String ADMIN="ADMIN";
     public static final String PASSENGER="YOLOVCHI";
     public static final String CODE_TIME_OUT="CODE TIME OUT";
@@ -49,6 +52,5 @@ public class Constants {
     public static final String CAN_NOT_TAKE_SMS_SENDING_SERVICE_TOKEN="CAN NOT TAKE SMS SENDING SERVICE TOKEN";
     public static final String FILE_SIZE_MUST_BU_10MB_OR_LOWER="FILE SIZE MUST BU 10MB OR LOWER";
     public static final String INPUT_EXCEPTION="INPUT EXCEPTION";
-    public static final String ANNOUNCEMENT_AVAILABLE="SIZDA ACTIVE E'LONLAR MAVJUD !!!";
 
 }

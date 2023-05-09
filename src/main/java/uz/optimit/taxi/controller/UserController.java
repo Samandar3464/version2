@@ -51,7 +51,7 @@ public class UserController {
 
      @PutMapping("/block/{id}")
      public ApiResponse blockRegionById(@PathVariable UUID id) {
-          return userService.deleteUserByID(id);
+          return userService.blockUserByID(id);
      }
 
      @PostMapping("/setFireBaseToken")

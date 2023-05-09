@@ -16,21 +16,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import uz.optimit.taxi.configuration.jwtConfig.JwtGenerate;
 import uz.optimit.taxi.entity.*;
 import uz.optimit.taxi.entity.api.ApiResponse;
+import uz.optimit.taxi.exception.AnnouncementNotFoundException;
 import uz.optimit.taxi.exception.UserAlreadyExistException;
 import uz.optimit.taxi.exception.UserNotFoundException;
 import uz.optimit.taxi.model.request.*;
 import uz.optimit.taxi.model.response.TokenResponse;
 import uz.optimit.taxi.model.response.UserResponseDto;
-import uz.optimit.taxi.repository.FamiliarRepository;
-import uz.optimit.taxi.repository.RoleRepository;
-import uz.optimit.taxi.repository.StatusRepository;
-import uz.optimit.taxi.repository.UserRepository;
-import uz.optimit.taxi.entity.CountMassage;
-import uz.optimit.taxi.repository.CountMassageRepository;
+import uz.optimit.taxi.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 
@@ -50,6 +45,7 @@ public class UserService {
     private final StatusRepository statusRepository;
     private final SmsService service;
     private final CountMassageRepository countMassageRepository;
+    private final AnnouncementPassengerRepository announcementPassengerRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional(rollbackFor = {Exception.class})
@@ -59,19 +55,17 @@ public class UserService {
             throw new UserAlreadyExistException(USER_ALREADY_EXIST);
         }
         Integer verificationCode = verificationCodeGenerator();
-//        service.sendSms(SmsModel.builder()
-//                .mobile_phone(userRegisterDto.getPhone())
-//                .message("DexTaxi. Tasdiqlash kodi: " + verificationCode ., Yo'linggiz behatar  bo'lsin.)
-//                .fromForDriver(4546)
-//                .callback_url("http://0000.uz/test.php")
-//                .build());
-        countMassageRepository.save(new CountMassage(userRegisterDto.getPhone(),1,LocalDateTime.now()));
-        System.out.println("verificationCode = " + verificationCode);
-        User user = User.fromPassenger(userRegisterDto, passwordEncoder, attachmentService, verificationCode, roleRepository);
-        User save = userRepository.save(user);
-        statusRepository.save(new Status(0, 0,save));
-        familiarRepository.save(Familiar.fromUser(save));
-        return new ApiResponse(SUCCESSFULLY, true, new TokenResponse(JwtGenerate.generateAccessToken(user), JwtGenerate.generateRefreshToken(user), UserResponseDto.fromDriver(user, attachmentService.attachUploadFolder)));
+        service.sendSms(SmsModel.builder()
+                .mobile_phone(userRegisterDto.getPhone())
+                .message("DexTaxi. Tasdiqlash kodi: " + verificationCode + ". Yo'linggiz behatar  bo'lsin.")
+                .from(4546)
+                .callback_url("http://0000.uz/test.php")
+                .build());
+        countMassageRepository.save(new CountMassage(userRegisterDto.getPhone(), 1, LocalDateTime.now()));
+        User user = userRepository.save(from(userRegisterDto, verificationCode));
+        statusRepository.save(new Status(0, 0, user));
+        familiarRepository.save(Familiar.fromUser(user));
+        return new ApiResponse(SUCCESSFULLY, true, new TokenResponse(JwtGenerate.generateAccessToken(user), JwtGenerate.generateRefreshToken(user), fromUserToResponse(user)));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -80,7 +74,7 @@ public class UserService {
             Authentication authentication = new UsernamePasswordAuthenticationToken(userLoginRequestDto.getPhone(), userLoginRequestDto.getPassword());
             Authentication authenticate = authenticationManager.authenticate(authentication);
             User user = (User) authenticate.getPrincipal();
-            return new ApiResponse(new TokenResponse(JwtGenerate.generateAccessToken(user), JwtGenerate.generateRefreshToken(user), UserResponseDto.fromDriver(user, attachmentService.attachUploadFolder)), true);
+            return new ApiResponse(new TokenResponse(JwtGenerate.generateAccessToken(user), JwtGenerate.generateRefreshToken(user), fromUserToResponse(user)), true);
         } catch (BadCredentialsException e) {
             throw new UserNotFoundException(USER_NOT_FOUND);
         }
@@ -122,26 +116,9 @@ public class UserService {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    private boolean verificationCodeLiveTime(LocalDateTime localDateTime) {
-        LocalDateTime now = LocalDateTime.now();
-        int day = now.getDayOfMonth() - localDateTime.getDayOfMonth();
-        int hour = now.getHour() - localDateTime.getHour();
-        int minute = now.getMinute() - localDateTime.getMinute();
-        if (day == 0 && hour == 0 && minute <= 2) {
-            return true;
-        }
-        return false;
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    private Integer verificationCodeGenerator() {
-        return RandomGenerator.getDefault().nextInt(100000, 999999);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
     public ApiResponse getByUserId(UUID id) {
         User user = checkUserExistById(id);
-        return new ApiResponse(UserResponseDto.fromDriver(user, attachmentService.attachUploadFolder), true);
+        return new ApiResponse(fromUserToResponse(user), true);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -153,10 +130,10 @@ public class UserService {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse deleteUserByID(UUID id) {
-        Optional<User> byId = userRepository.findById(id);
-        byId.get().setBlocked(true);
-        userRepository.save(byId.get());
+    public ApiResponse blockUserByID(UUID id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+        user.setBlocked(true);
+        userRepository.save(user);
         return new ApiResponse(DELETED, true);
     }
 
@@ -176,6 +153,49 @@ public class UserService {
             roles.add((byName));
         }
         userRepository.save(user);
+    }
+
+    private User from(UserRegisterDto userRegisterDto, int verificationCode) {
+        User user = User.from(userRegisterDto, verificationCode);
+        Attachment attachment = null;
+        if (userRegisterDto.getProfilePhoto() != null) {
+            attachment = attachmentService.saveToSystem(userRegisterDto.getProfilePhoto());
+        }
+        user.setProfilePhoto(attachment);
+        user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+//        user.setRoles(List.of(roleRepository.findByName(PASSENGER)));
+        user.setRoles(List.of(roleRepository.findByName(PASSENGER), roleRepository.findByName(DRIVER)));
+        return user;
+    }
+
+    public UserResponseDto fromUserToResponse(User user) {
+//       String photoLink = downloadUrl + "avatar.png";
+        String photoLink = "https://sb.kaleidousercontent.com/67418/992x558/7632960ff9/people.png";
+        if (user.getProfilePhoto() != null) {
+            Attachment attachment = user.getProfilePhoto();
+            photoLink = attachmentService.attachUploadFolder + attachment.getPath() + "/" + attachment.getNewName() + "." + attachment.getType();
+        }
+        AnnouncementPassenger announcementPassenger = announcementPassengerRepository.findByUserIdAndActiveAndDeletedFalse(user.getId(), true)
+                .orElseThrow(() -> new AnnouncementNotFoundException(PASSENGER_ANNOUNCEMENT_NOT_FOUND));
+        UserResponseDto userResponseDto = UserResponseDto.from(user);
+        userResponseDto.setPassengersList(announcementPassenger.getPassengersList());
+        userResponseDto.setProfilePhotoUrl(photoLink);
+        return userResponseDto;
+    }
+
+    private boolean verificationCodeLiveTime(LocalDateTime localDateTime) {
+        LocalDateTime now = LocalDateTime.now();
+        int day = now.getDayOfMonth() - localDateTime.getDayOfMonth();
+        int hour = now.getHour() - localDateTime.getHour();
+        int minute = now.getMinute() - localDateTime.getMinute();
+        if (day == 0 && hour == 0 && minute <= 2) {
+            return true;
+        }
+        return false;
+    }
+
+    private Integer verificationCodeGenerator() {
+        return RandomGenerator.getDefault().nextInt(100000, 999999);
     }
 
     private void countMassage() {

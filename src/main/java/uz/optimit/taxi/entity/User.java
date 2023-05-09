@@ -124,15 +124,14 @@ public class User implements UserDetails {
         return true;
     }
 
-    public static User fromPassenger(UserRegisterDto userRegisterDto, PasswordEncoder passwordEncoder,
-                                     AttachmentService attachmentService, Integer verificationCode ,
-                                     RoleRepository roleRepository){
-       Attachment attachment= new Attachment();
-        if (userRegisterDto.getProfilePhoto()==null){
-            attachment=null;
-        }else {
-            attachment= attachmentService.saveToSystem(userRegisterDto.getProfilePhoto());
-        }
+    public static User from(UserRegisterDto userRegisterDto,
+                        Integer verificationCode ){
+//       Attachment attachment= new Attachment();
+//        if (userRegisterDto.getProfilePhoto()==null){
+//            attachment=null;
+//        }else {
+//            attachment= attachmentService.saveToSystem(userRegisterDto.getProfilePhoto());
+//        }
         return User.builder()
                 .fullName(userRegisterDto.getFullName())
                 .phone(userRegisterDto.getPhone())
@@ -141,11 +140,9 @@ public class User implements UserDetails {
                 .registeredDate(LocalDateTime.now())
                 .verificationCode(verificationCode)
                 .verificationCodeLiveTime(LocalDateTime.now())
-                .profilePhoto(attachment)
-                .password(passwordEncoder.encode(userRegisterDto.getPassword()))
-//                .roles(List.of(roleRepository.findByName(PASSENGER)))
-                .roles(List.of(roleRepository.findByName(PASSENGER),roleRepository.findByName(DRIVER)))
                 .isBlocked(true)
+
+
                 .build();
     }
 }

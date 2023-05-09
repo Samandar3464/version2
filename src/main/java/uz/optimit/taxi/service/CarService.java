@@ -59,7 +59,7 @@ public class CarService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getCar() {
         User user = userService.checkUserExistByContext();
-        Car car = carRepository.findByUserIdAndActiveTrue(user.getId()).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
+        Car car = getCarByUserId(user.getId());
         return new ApiResponse(CarResponseDto.from(car, attachmentService.attachUploadFolder), true);
     }
 
@@ -74,7 +74,7 @@ public class CarService {
 
     public ApiResponse getCarSeat() {
         User user = userService.checkUserExistByContext();
-        Car car = carRepository.findByUserIdAndActiveTrue(user.getId()).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
+        Car car = getCarByUserId(user.getId());
         List<SeatResponse> seatResponses = new ArrayList<>();
         car.getSeatList().forEach(seat -> seatResponses.add(SeatResponse.from(seat)));
         return new ApiResponse(seatResponses, true);
@@ -105,4 +105,9 @@ public class CarService {
         carRepository.save(byId);
         return new ApiResponse(DELETED, true);
     }
+    public Car getCarByUserId(UUID user_id){
+        return carRepository.findByUserIdAndActiveTrue(user_id).orElseThrow(() ->
+                new CarNotFound(CAR_NOT_FOUND));
+    }
+
 }

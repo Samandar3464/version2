@@ -61,6 +61,7 @@ public class AnnouncementPassenger {
 
     private LocalDateTime createdTime;
 
+    private boolean deleted;
     public static AnnouncementPassenger from(AnnouncementPassengerRegisterRequestDto announcementRequestDto, User user, RegionRepository regionRepository, CityRepository cityRepository, FamiliarRepository familiarRepository) {
         return AnnouncementPassenger.builder()
                 .user(user)
@@ -78,6 +79,7 @@ public class AnnouncementPassenger {
                 .createdTime(LocalDateTime.now())
                 .price(announcementRequestDto.getPrice())
                 .active(true)
+                .deleted(false)
                 .build();
     }
 }

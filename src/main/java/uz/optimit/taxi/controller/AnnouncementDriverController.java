@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uz.optimit.taxi.entity.api.ApiResponse;
 import uz.optimit.taxi.model.request.AnnouncementDriverRegisterRequestDto;
+import uz.optimit.taxi.model.request.GetByFilter;
 import uz.optimit.taxi.service.AnnouncementDriverService;
 
 import java.util.UUID;
@@ -29,7 +30,7 @@ public class AnnouncementDriverController {
     @GetMapping("/getById/{id}")
     @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
     public ApiResponse getDriverById(@PathVariable("id")UUID id){
-        return announcementDriverService.getDriverById(id);
+        return announcementDriverService.getDriverAnnouncementById(id);
     }
 
     @GetMapping("/byId/{id}")
@@ -39,8 +40,8 @@ public class AnnouncementDriverController {
     }
 
     @GetMapping("/getListForAnonymousUser")
-    public ApiResponse getDriverListForAnonymousUser(){
-        return announcementDriverService.getDriverListForAnonymousUser();
+    public ApiResponse getDriverAnnouncementListForAnonymousUser(){
+        return announcementDriverService.getDriverAnnouncementListForAnonymousUser();
     }
 
     @GetMapping("/getDriverAnnouncements")
@@ -55,24 +56,14 @@ public class AnnouncementDriverController {
         return announcementDriverService.deleteDriverAnnouncement(id);
     }
 
-    @GetMapping("getAnnouncementDriverByFilter/{from}/{to}/{fromCity}/{toCity}/{fromTime}")
-    public ApiResponse getByFilter(
-        @PathVariable Integer from,
-        @PathVariable Integer to,
-        @PathVariable Integer  fromCity,
-        @PathVariable Integer  toCity,
-        @PathVariable String  fromTime
-    ){
-       return announcementDriverService.getByFilter(from,to ,fromCity,toCity,fromTime+" 00:01",fromTime+" 23:59");
+    @PostMapping("/getAnnouncementDriverByFilterWithoutCity")
+    public ApiResponse getByFilterWithCity(@RequestBody GetByFilter getByFilter){
+       return announcementDriverService.getByFilterWithoutCity(getByFilter);
     }
 
-    @GetMapping("getAnnouncementDriverByFilter/{from}/{to}/{fromTime}")
-    public ApiResponse getByFilter(
-        @PathVariable Integer from,
-        @PathVariable Integer to,
-        @PathVariable String fromTime
-    ){
-        return announcementDriverService.getByFilter(from,to ,fromTime+" 00:01",fromTime+" 23:59");
+    @PostMapping("/getAnnouncementDriverByFilterWithCity")
+    public ApiResponse getByFilterWithoutCity(@RequestBody GetByFilter getByFilter){
+        return announcementDriverService.getByFilterWithCity(getByFilter);
     }
     @GetMapping("/getDriverAnnouncementHistory")
     @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
