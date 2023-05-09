@@ -52,6 +52,7 @@ public class AnnouncementPassengerController {
      }
 
      @PostMapping("/getAnnouncementPassengerByFilter")
+     @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
      public ApiResponse getAnnouncementPassengerByFilter(@RequestBody GetByFilter getByFilter) {
           return announcementPassengerService.getByFilter(getByFilter);
      }

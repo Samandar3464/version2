@@ -27,6 +27,7 @@ public class CountMassageController {
     }
 
 //    @GetMapping("/getByPhone")
+//    @PreAuthorize("hasRole('ADMIN')")
 //    public ApiResponse getByPhone(){
 //        return countMassageService.getAllMassagesCountByPhoneNumbers();
 //    }

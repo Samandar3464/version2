@@ -22,7 +22,7 @@ public class AnnouncementDriverController {
     private final AnnouncementDriverService announcementDriverService;
 
     @PostMapping("/add")
-    @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
+    @PreAuthorize("hasAnyRole('HAYDOVCHI','ADMIN')")
     public ApiResponse addDriverAnnouncement(@RequestBody AnnouncementDriverRegisterRequestDto announcementDriverRegisterRequestDto){
         return announcementDriverService.add(announcementDriverRegisterRequestDto);
     }
@@ -45,13 +45,13 @@ public class AnnouncementDriverController {
     }
 
     @GetMapping("/getDriverAnnouncements")
-    @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
+    @PreAuthorize("hasAnyRole('HAYDOVCHI','ADMIN')")
     public ApiResponse getDriverAnnouncements(){
         return announcementDriverService.getDriverAnnouncements();
     }
 
     @DeleteMapping("/deleteDriverAnnouncements/{id}")
-    @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
+    @PreAuthorize("hasAnyRole('HAYDOVCHI','ADMIN')")
     public ApiResponse deleteDriverAnnouncement(@PathVariable UUID id){
         return announcementDriverService.deleteDriverAnnouncement(id);
     }
@@ -62,11 +62,12 @@ public class AnnouncementDriverController {
     }
 
     @PostMapping("/getAnnouncementDriverByFilterWithCity")
+    @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
     public ApiResponse getByFilterWithoutCity(@RequestBody GetByFilter getByFilter){
         return announcementDriverService.getByFilterWithCity(getByFilter);
     }
     @GetMapping("/getDriverAnnouncementHistory")
-    @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
+    @PreAuthorize("hasAnyRole('HAYDOVCHI','ADMIN')")
     public ApiResponse getDriverAnnouncementHistory(){
         return announcementDriverService.getHistory();
     }
