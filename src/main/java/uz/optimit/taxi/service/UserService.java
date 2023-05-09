@@ -26,6 +26,7 @@ import uz.optimit.taxi.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 
@@ -55,15 +56,15 @@ public class UserService {
             throw new UserAlreadyExistException(USER_ALREADY_EXIST);
         }
         Integer verificationCode = verificationCodeGenerator();
-        service.sendSms(SmsModel.builder()
-                .mobile_phone(userRegisterDto.getPhone())
-                .message("DexTaxi. Tasdiqlash kodi: " + verificationCode + ". Yo'linggiz behatar  bo'lsin.")
-                .from(4546)
-                .callback_url("http://0000.uz/test.php")
-                .build());
+//        service.sendSms(SmsModel.builder()
+//                .mobile_phone(userRegisterDto.getPhone())
+//                .message("DexTaxi. Tasdiqlash kodi: " + verificationCode + ". Yo'linggiz behatar  bo'lsin.")
+//                .from(4546)
+//                .callback_url("http://0000.uz/test.php")
+//                .build());
         countMassageRepository.save(new CountMassage(userRegisterDto.getPhone(), 1, LocalDateTime.now()));
         User user = userRepository.save(from(userRegisterDto, verificationCode));
-        statusRepository.save(new Status(0, 0, user));
+        statusRepository.save(Status.builder().user(user).count(1L).stars(5L).build());
         familiarRepository.save(Familiar.fromUser(user));
         return new ApiResponse(SUCCESSFULLY, true, new TokenResponse(JwtGenerate.generateAccessToken(user), JwtGenerate.generateRefreshToken(user), fromUserToResponse(user)));
     }
@@ -175,10 +176,11 @@ public class UserService {
             Attachment attachment = user.getProfilePhoto();
             photoLink = attachmentService.attachUploadFolder + attachment.getPath() + "/" + attachment.getNewName() + "." + attachment.getType();
         }
-        AnnouncementPassenger announcementPassenger = announcementPassengerRepository.findByUserIdAndActiveAndDeletedFalse(user.getId(), true)
-                .orElseThrow(() -> new AnnouncementNotFoundException(PASSENGER_ANNOUNCEMENT_NOT_FOUND));
         UserResponseDto userResponseDto = UserResponseDto.from(user);
-        userResponseDto.setPassengersList(announcementPassenger.getPassengersList());
+        Optional<AnnouncementPassenger> announcementPassenger = announcementPassengerRepository.findByUserIdAndActiveAndDeletedFalse(user.getId(), true);
+        if (announcementPassenger.isPresent()){
+            userResponseDto.setPassengersList(announcementPassenger.get().getPassengersList());
+        }
         userResponseDto.setProfilePhotoUrl(photoLink);
         return userResponseDto;
     }

@@ -1,6 +1,5 @@
 package uz.optimit.taxi.AdminController;
 
-import com.google.protobuf.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,7 @@ import uz.optimit.taxi.service.CountMassageService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/countMassage/")
+@RequestMapping("/api/v1/countMassage")
 public class CountMassageController {
 
     private final CountMassageService countMassageService;
@@ -27,8 +26,8 @@ public class CountMassageController {
         return countMassageService.getAllMassagesCountByDate(countMassageRequest);
     }
 
-    @GetMapping("/getByPhone")
-    public ApiResponse getByPhone(){
-        return countMassageService.getAllMassagesCountByPhoneNumbers();
-    }
+//    @GetMapping("/getByPhone")
+//    public ApiResponse getByPhone(){
+//        return countMassageService.getAllMassagesCountByPhoneNumbers();
+//    }
 }

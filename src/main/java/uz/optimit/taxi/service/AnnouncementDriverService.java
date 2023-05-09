@@ -114,7 +114,7 @@ public class AnnouncementDriverService {
         List<Notification> notifications = notificationRepository.findByAnnouncementDriverIdAndActiveAndReceived(allByActive.get(0).getId(), false, true);
         List<Familiar> familiars = new ArrayList<>();
         notifications.forEach(obj ->
-                familiars.addAll(announcementPassengerService.getByUserIdAndActive(obj.getAnnouncementPassengerId(), true).getPassengersList()));
+                familiars.addAll(announcementPassengerService.getByIdAndActiveAndDeletedFalse(obj.getAnnouncementPassengerId(),false).getPassengersList()));
         List<AnnouncementDriverResponse> response = new ArrayList<>();
         allByActive.forEach((announcementDriver) -> response.add(fromAnnouncementDriverResponse(announcementDriver, announcementDriver.getCar(), familiars)));
         return new ApiResponse(response, true);
@@ -159,9 +159,8 @@ public class AnnouncementDriverService {
         return announcementDriverRepository.findByIdAndActiveAndDeletedFalse(announcement_id, active)
                 .orElseThrow(() -> new AnnouncementNotFoundException(DRIVER_ANNOUNCEMENT_NOT_FOUND));
     }
-    public AnnouncementDriver getByUserIdAndActive(UUID user_id , boolean active){
-        return announcementDriverRepository.findByUserIdAndActive(user_id,active)
-                .orElseThrow(() -> new AnnouncementNotFoundException(DRIVER_ANNOUNCEMENT_NOT_FOUND));
+    public List<AnnouncementDriver> getByUserIdAndActiveAndDeletedFalse(UUID user_id , boolean active){
+        return announcementDriverRepository.findAllByUserIdAndActiveAndDeletedFalse(user_id,active);
     }
 
     public boolean existByUserIdAndActiveAndDeletedFalse(UUID userId){

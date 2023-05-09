@@ -13,7 +13,7 @@ import uz.optimit.taxi.exception.SmsServiceBroken;
 import uz.optimit.taxi.model.request.SmsModel;
 import uz.optimit.taxi.model.response.SmsResponse;
 import uz.optimit.taxi.model.request.SmsToken;
-import uz.optimit.taxi.entity.Enum.Token;
+import uz.optimit.taxi.entity.Token;
 import uz.optimit.taxi.repository.TokenRepository;
 
 import java.util.HashMap;

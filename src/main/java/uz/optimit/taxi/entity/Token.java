@@ -1,4 +1,4 @@
-package uz.optimit.taxi.entity.Enum;
+package uz.optimit.taxi.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

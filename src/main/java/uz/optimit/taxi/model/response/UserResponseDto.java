@@ -36,12 +36,14 @@ public class UserResponseDto {
     private List<Familiar> passengersList;
 
     public static UserResponseDto from(User user) {
+        double status= (double) (user.getStatus().getStars()) /user.getStatus().getCount();
         return UserResponseDto.builder()
                 .id(user.getId())
                 .fullName(user.getFullName())
                 .phone(user.getPhone())
                 .age(LocalDate.now().getYear() - user.getBirthDate().getYear())
                 .gender(user.getGender())
+                .status(status)
                 .build();
     }
 }

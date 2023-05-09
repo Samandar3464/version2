@@ -28,8 +28,8 @@ public class CountMassageService {
         Integer counted = countMassageRepository.countAllBySandedTimeBetween(countMassageRequest.getTime1(), countMassageRequest.getTime2());
         return new ApiResponse(counted,true);
     }
-    public ApiResponse getAllMassagesCountByPhoneNumbers(){
-        List<CountResponse> countMassages = countMassageRepository.countCountMassage();
-        return new ApiResponse(countMassages,true);
-    }
+//    public ApiResponse getAllMassagesCountByPhoneNumbers(){
+//        List<CountResponse> countMassages = countMassageRepository.countCountMassage();
+//        return new ApiResponse(countMassages,true);
+//    }
 }

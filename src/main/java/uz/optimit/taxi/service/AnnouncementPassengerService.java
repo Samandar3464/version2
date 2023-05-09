@@ -10,6 +10,7 @@ import uz.optimit.taxi.entity.api.ApiResponse;
 import uz.optimit.taxi.exception.AnnouncementAlreadyExistException;
 import uz.optimit.taxi.exception.AnnouncementAvailable;
 import uz.optimit.taxi.exception.AnnouncementNotFoundException;
+import uz.optimit.taxi.exception.RecordNotFoundException;
 import uz.optimit.taxi.model.request.AnnouncementPassengerRegisterRequestDto;
 import uz.optimit.taxi.model.request.GetByFilter;
 import uz.optimit.taxi.model.response.AnnouncementPassengerResponse;
@@ -30,7 +31,6 @@ public class AnnouncementPassengerService {
     private final RegionRepository regionRepository;
     private final CityRepository cityRepository;
     private final UserService userService;
-    private final AttachmentService attachmentService;
     private final FamiliarRepository familiarRepository;
     private final AnnouncementPassengerRepository announcementPassengerRepository;
     private final AnnouncementDriverRepository announcementDriverRepository;
@@ -127,12 +127,16 @@ public class AnnouncementPassengerService {
                 .orElseThrow(() -> new AnnouncementNotFoundException(PASSENGER_ANNOUNCEMENT_NOT_FOUND));
     }
 
-    public AnnouncementPassenger getByUserIdAndActive(UUID user_id, boolean active) {
-        return announcementPassengerRepository.findByUserIdAndActive(user_id, active)
+    public AnnouncementPassenger getByUserId(UUID user_id) {
+        return announcementPassengerRepository.findByUserId(user_id)
                 .orElseThrow(() -> new AnnouncementNotFoundException(PASSENGER_ANNOUNCEMENT_NOT_FOUND));
     }
 
     public boolean existByUserIdAndActiveTrueAndDeletedFalse(UUID user_id) {
         return announcementPassengerRepository.existsByUserIdAndActiveTrueAndDeletedFalse(user_id);
     }
+
+    public List<AnnouncementPassenger> getAnnouncementPassenger(User passenger) {
+        return announcementPassengerRepository
+                .findAllByUserIdAndActiveAndDeletedFalse(passenger.getId(), true);}
 }

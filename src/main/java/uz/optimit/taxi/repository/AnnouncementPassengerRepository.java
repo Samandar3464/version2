@@ -17,7 +17,7 @@ public interface AnnouncementPassengerRepository extends JpaRepository<Announcem
 
     Optional<AnnouncementPassenger> findByUserIdAndActiveAndDeletedFalse(UUID userId, boolean active);
 
-    Optional<AnnouncementPassenger> findByUserIdAndActive(UUID userId, boolean active);
+    Optional<AnnouncementPassenger> findByUserId(UUID userId);
 
     boolean existsByUserIdAndActiveTrueAndDeletedFalse(UUID userId);
 
