@@ -27,7 +27,4 @@ public class Seat {
     @ManyToOne
     private Car car;
 
-//    @JsonIgnore
-//    @ManyToMany(mappedBy = "carSeats")
-//    private List<Notification> notifications;
 }

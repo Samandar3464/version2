@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AutoModelRegisterRequestDto {
+
      private String name;
+
      private byte countSeat;
+
      private Integer categoryId;
 }

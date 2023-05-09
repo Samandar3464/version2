@@ -26,9 +26,6 @@ public class AutoModel {
     private byte countSeat;
 
     private boolean active;
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "autoModel")
-//    private List<Car> car;
 
     public AutoModel(String name, byte countSeat, AutoCategory autoCategory, boolean active) {
         this.name = name;

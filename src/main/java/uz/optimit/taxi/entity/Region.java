@@ -24,16 +24,4 @@ public class Region {
     public static Region from(RegionRegisterRequestDto regionRegisterRequestDto){
         return Region.builder().name(regionRegisterRequestDto.getName()).build();
     }
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "fromRegion")
-//    private List<AnnouncementPassenger> fromAnnouncementUser;
-//
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "toRegion")
-//    private List<AnnouncementPassenger> toAnnouncementUser;
-
-//    public Region(Integer id, String name) {
-//        this.id = id;
-//        this.name = name;
-//    }
 }

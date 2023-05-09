@@ -13,8 +13,11 @@ import java.util.UUID;
 @Builder
 public class AnnouncementResponseForList {
     private UUID userId;
+
     private String fullName;
+
     private UUID notificationId;
+
     private UUID announcementId;
 
     public static AnnouncementResponseForList from(User user, UUID notificationId, UUID announcementId){

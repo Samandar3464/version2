@@ -17,15 +17,25 @@ import java.util.UUID;
 public class AnnouncementPassengerRegisterRequestDto {
 
      private Integer fromRegionId;
+
      private Integer toRegionId;
+
      private Integer fromCityId;
+
      private Integer toCityId;
+
      private double fromLatitude;
+
      private double fromLongitude;
+
      private double toLongitude;
+
      private double toLatitude;
+
      private boolean baggage;
+
      private double price;
+
      private List<UUID> passengersList;
 
      @JsonSerialize(using = LocalDateTimeSerializer.class)

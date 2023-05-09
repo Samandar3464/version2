@@ -20,16 +20,25 @@ import java.util.UUID;
 public class AnnouncementDriverRegisterRequestDto {
 
      private Integer fromRegionId;
+
      private Integer toRegionId;
+
      private Integer fromCityId;
+
      private Integer toCityId;
+
      @JsonSerialize(using = LocalDateTimeSerializer.class)
      @JsonDeserialize(using = LocalDateTimeDeserializer.class)
      private LocalDateTime timeToDrive;
+
      private double frontSeatPrice;
+
      private double backSeatPrice;
+
      private boolean baggage;
+
      private String info;
+
      private List<UUID> seatIdList;
 
 }

@@ -15,9 +15,11 @@ import static uz.optimit.taxi.entity.Enum.Constants.*;
 public class NotificationMessageResponse {
 
     private String receiverToken;
+
     private String title;
 
     private String body;
+
     private HashMap<String, String> data;
 
     public static NotificationMessageResponse reCreate(String token,HashMap<String,String> data) {

@@ -20,12 +20,19 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserResponseDto {
     private UUID id;
+
     private String fullName;
+
     private String phone;
+
     private int age;
+
     private double status;
+
     private Gender gender;
+
     private String profilePhotoUrl;
+
     private List<Familiar> passengersList;
 
     public static UserResponseDto from(User user) {

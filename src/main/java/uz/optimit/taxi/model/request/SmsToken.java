@@ -1,4 +1,4 @@
-package uz.optimit.taxi.model;
+package uz.optimit.taxi.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

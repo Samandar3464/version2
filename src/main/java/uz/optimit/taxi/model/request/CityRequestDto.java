@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CityRequestDto {
+
      private Integer regionId;
+
      private String name;
 }

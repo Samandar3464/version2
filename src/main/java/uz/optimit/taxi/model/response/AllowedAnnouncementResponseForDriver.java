@@ -59,13 +59,4 @@ public class AllowedAnnouncementResponseForDriver {
                 .build();
     }
 
-//    public static AllowedAnnouncementResponseForDriver fromForPassenger(User user, Notification notification){
-//        return AllowedAnnouncementResponseForDriver.builder()
-//                .userId(user.getId())
-//                .fullName(user.getFullName())
-//                .phone(user.getPhone())
-//                .announcementId(notification.getAnnouncementPassengerId())
-//                .notificationId(notification.getId())
-//                .build();
-//    }
 }

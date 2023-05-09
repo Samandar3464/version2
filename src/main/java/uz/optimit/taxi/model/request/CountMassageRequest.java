@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CountMassageRequest {
 
-
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime time1;
+
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime time2;

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import uz.optimit.taxi.entity.Attachment;
 import uz.optimit.taxi.entity.AutoModel;
 import uz.optimit.taxi.entity.Car;
 import uz.optimit.taxi.entity.User;
@@ -46,21 +47,21 @@ public class CarService {
     public ApiResponse disActiveCarList() {
         List<Car> allByActive = carRepository.findAllByActiveFalse();
         List<CarResponseDto> carResponseDtoList = new ArrayList<>();
-        allByActive.forEach(car -> carResponseDtoList.add(CarResponseDto.from(car, attachmentService.attachUploadFolder)));
+        allByActive.forEach(this::fromCarToResponse);
         return new ApiResponse(carResponseDtoList, true);
     }
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getCarById(UUID carId) {
         Car car = carRepository.findById(carId).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
-        return new ApiResponse(CarResponseDto.from(car, attachmentService.attachUploadFolder), true);
+        return new ApiResponse(fromCarToResponse(car), true);
     }
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getCar() {
         User user = userService.checkUserExistByContext();
         Car car = getCarByUserId(user.getId());
-        return new ApiResponse(CarResponseDto.from(car, attachmentService.attachUploadFolder), true);
+        return new ApiResponse(fromCarToResponse(car), true);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -98,14 +99,32 @@ public class CarService {
         return save;
     }
 
+    private CarResponseDto fromCarToResponse(Car car) {
+        Attachment texPassportPhoto1 = car.getTexPassportPhoto();
+        String texPasswordPhotoLink = attachmentService.attachUploadFolder + texPassportPhoto1.getPath() + "/" + texPassportPhoto1.getNewName() + "." + texPassportPhoto1.getType();
+        Attachment photoDriverLicense1 = car.getPhotoDriverLicense();
+        String photoDriverLicense2 = attachmentService.attachUploadFolder + photoDriverLicense1.getPath() + "/" + photoDriverLicense1.getNewName() + "." + photoDriverLicense1.getType();
+        List<Attachment> autoPhotos1 = car.getAutoPhotos();
+        List<String> carPhotoList = new ArrayList<>();
+        for (Attachment attachment : autoPhotos1) {
+            carPhotoList.add(attachmentService.attachUploadFolder + attachment.getPath() + "/" + attachment.getNewName() + "." + attachment.getType());
+        }
+        CarResponseDto carResponseDto = CarResponseDto.from(car);
+        carResponseDto.setTexPassportPhotoPath(texPasswordPhotoLink);
+        carResponseDto.setPhotoDriverLicense(photoDriverLicense2);
+        carResponseDto.setAutoPhotosPath(carPhotoList);
+        return carResponseDto;
+    }
+
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse deleteCarByID(UUID id) {
-        Car byId = carRepository.findById(id).orElseThrow(()->new CarNotFound(CAR_NOT_FOUND));
+        Car byId = carRepository.findById(id).orElseThrow(() -> new CarNotFound(CAR_NOT_FOUND));
         byId.setActive(false);
         carRepository.save(byId);
         return new ApiResponse(DELETED, true);
     }
-    public Car getCarByUserId(UUID user_id){
+
+    public Car getCarByUserId(UUID user_id) {
         return carRepository.findByUserIdAndActiveTrue(user_id).orElseThrow(() ->
                 new CarNotFound(CAR_NOT_FOUND));
     }

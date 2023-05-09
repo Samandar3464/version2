@@ -126,12 +126,6 @@ public class User implements UserDetails {
 
     public static User from(UserRegisterDto userRegisterDto,
                         Integer verificationCode ){
-//       Attachment attachment= new Attachment();
-//        if (userRegisterDto.getProfilePhoto()==null){
-//            attachment=null;
-//        }else {
-//            attachment= attachmentService.saveToSystem(userRegisterDto.getProfilePhoto());
-//        }
         return User.builder()
                 .fullName(userRegisterDto.getFullName())
                 .phone(userRegisterDto.getPhone())

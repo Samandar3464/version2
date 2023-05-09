@@ -40,18 +40,7 @@ public class CarResponseDto {
     private List<Seat> seatList;
 
 
-     public static CarResponseDto from(Car car, String downloadUrl){
-         Attachment texPassportPhoto1 = car.getTexPassportPhoto();
-         String texPasswordPhotoLink = downloadUrl + texPassportPhoto1.getPath() + "/" + texPassportPhoto1.getNewName() + "." + texPassportPhoto1.getType();
-         Attachment photoDriverLicense1 = car.getPhotoDriverLicense();
-         String photoDriverLicense2 = downloadUrl + photoDriverLicense1.getPath() + "/" + photoDriverLicense1.getNewName() + "." + photoDriverLicense1.getType();
-
-         List<Attachment> autoPhotos1 = car.getAutoPhotos();
-         List<String> carPhotoList = new ArrayList<>();
-         for (Attachment attachment : autoPhotos1) {
-             carPhotoList.add(downloadUrl + attachment.getPath() + "/" + attachment.getNewName() + "." + attachment.getType());
-         }
-
+     public static CarResponseDto from(Car car){
          return    CarResponseDto.builder()
                  .id(car.getId())
                  .carNumber(car.getCarNumber())
@@ -60,9 +49,6 @@ public class CarResponseDto {
                  .autoModel(car.getAutoModel().getName())
                  .active(car.isActive())
                  .seatList(car.getSeatList())
-                 .texPassportPhotoPath(texPasswordPhotoLink)
-                 .photoDriverLicense(photoDriverLicense2)
-                 .autoPhotosPath(carPhotoList)
                  .build();
      }
 }

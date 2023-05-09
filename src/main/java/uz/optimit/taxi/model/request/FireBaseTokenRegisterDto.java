@@ -12,5 +12,6 @@ import java.util.UUID;
 public class FireBaseTokenRegisterDto {
 
     private UUID userId;
+
     private String fireBaseToken;
 }
