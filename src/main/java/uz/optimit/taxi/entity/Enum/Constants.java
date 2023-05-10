@@ -53,5 +53,6 @@ public class Constants {
     public static final String FILE_SIZE_MUST_BU_10MB_OR_LOWER="FILE SIZE MUST BU 10MB OR LOWER";
     public static final String INPUT_EXCEPTION="INPUT EXCEPTION";
     public static final String ADVERTISING_NOT_FOUND="ADVERTISING NOT FOUND";
+    public static final String PARCEL_NOT_FOUND="PARCEL NOT FOUND";
 
 }

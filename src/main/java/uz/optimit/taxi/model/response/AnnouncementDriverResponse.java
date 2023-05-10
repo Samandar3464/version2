@@ -34,8 +34,7 @@ public class AnnouncementDriverResponse {
     private List<Seat> seatList;
     private List<Familiar> familiars;
 
-    public static AnnouncementDriverResponse from(
-            AnnouncementDriver announcementDriver) {
+    public static AnnouncementDriverResponse from(AnnouncementDriver announcementDriver) {
         return AnnouncementDriverResponse
                 .builder()
                 .id(announcementDriver.getId())

@@ -10,7 +10,6 @@ import uz.optimit.taxi.entity.api.ApiResponse;
 import uz.optimit.taxi.exception.AnnouncementAlreadyExistException;
 import uz.optimit.taxi.exception.AnnouncementAvailable;
 import uz.optimit.taxi.exception.AnnouncementNotFoundException;
-import uz.optimit.taxi.exception.RecordNotFoundException;
 import uz.optimit.taxi.model.request.AnnouncementPassengerRegisterRequestDto;
 import uz.optimit.taxi.model.request.GetByFilter;
 import uz.optimit.taxi.model.response.AnnouncementPassengerResponse;
@@ -44,7 +43,7 @@ public class AnnouncementPassengerService {
         if (existByUserIdAndActiveTrueAndDeletedFalse(user.getId())) {
             throw new AnnouncementAlreadyExistException(ANNOUNCEMENT_PASSENGER_ALREADY_EXIST);
         }
-        AnnouncementPassenger announcementPassenger = AnnouncementPassenger.from(announcementPassengerRegisterRequestDto, user, regionRepository, cityRepository, familiarRepository);
+        AnnouncementPassenger announcementPassenger = fromRequest(announcementPassengerRegisterRequestDto, user);
         announcementPassengerRepository.save(announcementPassenger);
         return new ApiResponse(SUCCESSFULLY, true);
     }
@@ -138,5 +137,17 @@ public class AnnouncementPassengerService {
 
     public List<AnnouncementPassenger> getAnnouncementPassenger(User passenger) {
         return announcementPassengerRepository
-                .findAllByUserIdAndActiveAndDeletedFalse(passenger.getId(), true);}
+                .findAllByUserIdAndActiveAndDeletedFalse(passenger.getId(), true);
+    }
+
+    private AnnouncementPassenger fromRequest(AnnouncementPassengerRegisterRequestDto announcementPassengerRegisterRequestDto, User user) {
+        AnnouncementPassenger announcementPassenger = AnnouncementPassenger.from(announcementPassengerRegisterRequestDto);
+        announcementPassenger.setUser(user);
+        announcementPassenger.setFromRegion(regionRepository.getById(announcementPassengerRegisterRequestDto.getFromRegionId()));
+        announcementPassenger.setToRegion(regionRepository.getById(announcementPassengerRegisterRequestDto.getToRegionId()));
+        announcementPassenger.setFromCity(cityRepository.getById(announcementPassengerRegisterRequestDto.getFromCityId()));
+        announcementPassenger.setToCity(cityRepository.getById(announcementPassengerRegisterRequestDto.getToCityId()));
+        announcementPassenger.setPassengersList(familiarRepository.findByIdInAndActive(announcementPassengerRegisterRequestDto.getPassengersList(),true));
+        return announcementPassenger;
+    }
 }

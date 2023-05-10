@@ -62,24 +62,20 @@ public class AnnouncementPassenger {
     private LocalDateTime createdTime;
 
     private boolean deleted;
-    public static AnnouncementPassenger from(AnnouncementPassengerRegisterRequestDto announcementRequestDto, User user, RegionRepository regionRepository, CityRepository cityRepository, FamiliarRepository familiarRepository) {
-        return AnnouncementPassenger.builder()
-                .user(user)
-                .fromRegion(regionRepository.getById(announcementRequestDto.getFromRegionId()))
-                .toRegion(regionRepository.getById(announcementRequestDto.getToRegionId()))
-                .fromCity(cityRepository.getById(announcementRequestDto.getFromCityId()))
-                .toCity(cityRepository.getById(announcementRequestDto.getToCityId()))
-                .fromLatitude(announcementRequestDto.getFromLatitude())
-                .fromLongitude(announcementRequestDto.getFromLongitude())
-                .toLatitude(announcementRequestDto.getToLatitude())
-                .toLongitude(announcementRequestDto.getToLongitude())
-                .passengersList(familiarRepository.findByIdInAndActive(announcementRequestDto.getPassengersList(),true))
-                .timeToTravel(announcementRequestDto.getTimeToTravel())
-                .info(announcementRequestDto.getInfo())
-                .createdTime(LocalDateTime.now())
-                .price(announcementRequestDto.getPrice())
-                .active(true)
-                .deleted(false)
-                .build();
-    }
+
+public static AnnouncementPassenger from(AnnouncementPassengerRegisterRequestDto announcementRequestDto) {
+    return AnnouncementPassenger.builder()
+            .fromLatitude(announcementRequestDto.getFromLatitude())
+            .fromLongitude(announcementRequestDto.getFromLongitude())
+            .toLatitude(announcementRequestDto.getToLatitude())
+            .toLongitude(announcementRequestDto.getToLongitude())
+            .timeToTravel(announcementRequestDto.getTimeToTravel())
+            .info(announcementRequestDto.getInfo())
+            .createdTime(LocalDateTime.now())
+            .price(announcementRequestDto.getPrice())
+            .baggage(announcementRequestDto.isBaggage())
+            .active(true)
+            .deleted(false)
+            .build();
+}
 }
