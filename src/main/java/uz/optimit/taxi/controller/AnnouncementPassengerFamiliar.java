@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/forFamiliar")
+@RequestMapping("/api/v2/forFamiliar")
 public class AnnouncementPassengerFamiliar {
      private final AnnouncementFamiliarService announcementFamiliarService;
 

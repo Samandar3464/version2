@@ -9,7 +9,7 @@ import uz.optimit.taxi.service.RegionService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/region")
+@RequestMapping("/api/v2/region")
 public class RegionController {
 
      private final RegionService regionService;

@@ -9,7 +9,7 @@ import uz.optimit.taxi.service.CountMassageService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/countMassage")
+@RequestMapping("/api/v2/countMassage")
 public class CountMassageController {
 
     private final CountMassageService countMassageService;

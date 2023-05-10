@@ -12,7 +12,7 @@ import uz.optimit.taxi.service.CarService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/admin/car")
+@RequestMapping("/api/v2/admin/car")
 @RequiredArgsConstructor
 public class AdminControllerUptoCar {
 

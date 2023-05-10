@@ -9,7 +9,7 @@ import uz.optimit.taxi.service.AutoModelService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/autoModel")
+@RequestMapping("/api/v2/autoModel")
 public class AutoModelController {
 
     private final AutoModelService autoModelService;

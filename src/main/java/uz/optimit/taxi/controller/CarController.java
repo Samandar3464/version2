@@ -11,7 +11,7 @@ import uz.optimit.taxi.service.CarService;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/car")
+@RequestMapping("/api/v2/car")
 @RequiredArgsConstructor
 public class CarController {
     private final CarService carService;

@@ -52,5 +52,6 @@ public class Constants {
     public static final String CAN_NOT_TAKE_SMS_SENDING_SERVICE_TOKEN="CAN NOT TAKE SMS SENDING SERVICE TOKEN";
     public static final String FILE_SIZE_MUST_BU_10MB_OR_LOWER="FILE SIZE MUST BU 10MB OR LOWER";
     public static final String INPUT_EXCEPTION="INPUT EXCEPTION";
+    public static final String ADVERTISING_NOT_FOUND="ADVERTISING NOT FOUND";
 
 }

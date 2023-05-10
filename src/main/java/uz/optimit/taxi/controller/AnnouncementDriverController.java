@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/driver")
+@RequestMapping("/api/v2/driver")
 public class AnnouncementDriverController {
 
     private final AnnouncementDriverService announcementDriverService;

@@ -9,7 +9,7 @@ import uz.optimit.taxi.service.CityService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/city")
+@RequestMapping("/api/v2/city")
 public class CityController {
      private final CityService cityService;
 

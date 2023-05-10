@@ -9,7 +9,7 @@ import uz.optimit.taxi.service.AutoCategoryService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/autoCategory")
+@RequestMapping("/api/v2/autoCategory")
 public class AutoCategoryController {
 
      private final AutoCategoryService autoCategoryService;

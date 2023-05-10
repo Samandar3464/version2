@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/passenger")
+@RequestMapping("/api/v2/passenger")
 public class AnnouncementPassengerController {
 
      private final AnnouncementPassengerService announcementPassengerService;
