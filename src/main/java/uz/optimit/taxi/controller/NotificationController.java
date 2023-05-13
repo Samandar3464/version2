@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.optimit.taxi.entity.api.ApiResponse;
-import uz.optimit.taxi.model.request.AcceptDriverRequestDto;
+import uz.optimit.taxi.model.request.AcceptRequestDto;
 import uz.optimit.taxi.model.request.NotificationRequestDto;
 import uz.optimit.taxi.service.NotificationService;
 
@@ -59,14 +59,14 @@ public class NotificationController {
 
     @PostMapping("/acceptDiverRequest")
     @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
-    public ApiResponse joinDiverRequest(@RequestBody AcceptDriverRequestDto acceptDriverRequestDto){
-        return notificationService.acceptDiverRequest(acceptDriverRequestDto);
+    public ApiResponse joinDiverRequest(@RequestBody AcceptRequestDto acceptRequestDto){
+        return notificationService.acceptDiverRequest(acceptRequestDto);
     }
 
-    @GetMapping("/acceptPassengerRequest/{id}")
+    @PostMapping("/acceptPassengerRequest")
     @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
-    public ApiResponse joinPassengerRequest(@PathVariable UUID id){
-        return notificationService.acceptPassengerRequest(id);
+    public ApiResponse joinPassengerRequest(@RequestBody AcceptRequestDto acceptRequestDto){
+        return notificationService.acceptPassengerRequest(acceptRequestDto);
     }
     @GetMapping("/getAcceptedNotificationsForDriver")
     @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")

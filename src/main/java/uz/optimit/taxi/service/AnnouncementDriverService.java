@@ -14,12 +14,12 @@ import uz.optimit.taxi.model.request.GetByFilter;
 import uz.optimit.taxi.model.response.AnnouncementDriverActiveResponse;
 import uz.optimit.taxi.model.response.AnnouncementDriverResponse;
 import uz.optimit.taxi.model.response.AnnouncementDriverResponseAnonymous;
-import uz.optimit.taxi.model.response.UserResponseDto;
 import uz.optimit.taxi.repository.AnnouncementDriverRepository;
 import uz.optimit.taxi.repository.CityRepository;
 import uz.optimit.taxi.repository.NotificationRepository;
 import uz.optimit.taxi.repository.RegionRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -59,8 +59,8 @@ public class AnnouncementDriverService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getDriverAnnouncementListForAnonymousUser() {
         List<AnnouncementDriverResponseAnonymous> driverResponses = new ArrayList<>();
-        announcementDriverRepository.findAllByActive(true).forEach(announcementDriver ->
-            driverResponses.add(AnnouncementDriverResponseAnonymous.from(announcementDriver)));
+        announcementDriverRepository.findAllByActiveTrueAndTimeToDriveAfterOrderByCreatedTimeDesc(LocalDateTime.now().minusDays(1)).forEach(announcementDriver ->
+                driverResponses.add(AnnouncementDriverResponseAnonymous.from(announcementDriver)));
         return new ApiResponse(driverResponses, true);
     }
 
@@ -114,7 +114,7 @@ public class AnnouncementDriverService {
         List<Notification> notifications = notificationRepository.findByAnnouncementDriverIdAndActiveAndReceived(allByActive.get(0).getId(), false, true);
         List<Familiar> familiars = new ArrayList<>();
         notifications.forEach(obj ->
-                familiars.addAll(announcementPassengerService.getByIdAndActiveAndDeletedFalse(obj.getAnnouncementPassengerId(),false).getPassengersList()));
+                familiars.addAll(announcementPassengerService.getByIdAndActiveAndDeletedFalse(obj.getAnnouncementPassengerId(), false).getPassengersList()));
         List<AnnouncementDriverResponse> response = new ArrayList<>();
         allByActive.forEach((announcementDriver) -> response.add(fromAnnouncementDriverResponse(announcementDriver, announcementDriver.getCar(), familiars)));
         return new ApiResponse(response, true);
@@ -122,10 +122,10 @@ public class AnnouncementDriverService {
 
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getByFilterWithoutCity(GetByFilter getByFilter) {
-        List<AnnouncementDriver> all = announcementDriverRepository.findAllByActiveAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToDriveBetweenOrderByCreatedTimeDesc(
-                true
-                , getByFilter.getFromRegionId()
+        List<AnnouncementDriver> all = announcementDriverRepository.findAllByActiveTrueAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToDriveAfterAndTimeToDriveBetweenOrderByCreatedTimeDesc(
+                getByFilter.getFromRegionId()
                 , getByFilter.getToRegionId()
+                , LocalDateTime.now().minusDays(1)
                 , getByFilter.getTime1()
                 , getByFilter.getTime2());
         List<AnnouncementDriverResponseAnonymous> driverResponses = new ArrayList<>();
@@ -138,12 +138,12 @@ public class AnnouncementDriverService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getByFilterWithCity(GetByFilter getByFilter) {
         List<AnnouncementDriver> driverList = announcementDriverRepository
-                .findAllByActiveAndFromRegionIdAndToRegionIdAndFromCityIdAndToCityIdAndDeletedFalseAndTimeToDriveBetweenOrderByCreatedTimeDesc(
-                        true
-                        , getByFilter.getFromRegionId()
+                .findAllByActiveTrueAndFromRegionIdAndToRegionIdAndFromCityIdAndToCityIdAndDeletedFalseAndTimeToDriveAfterAndTimeToDriveBetweenOrderByCreatedTimeDesc(
+                        getByFilter.getFromRegionId()
                         , getByFilter.getToRegionId()
                         , getByFilter.getFromCityId()
                         , getByFilter.getToCityId()
+                        , LocalDateTime.now().minusDays(1)
                         , getByFilter.getTime1()
                         , getByFilter.getTime2());
         List<AnnouncementDriverResponse> announcementDrivers = new ArrayList<>();
@@ -151,21 +151,28 @@ public class AnnouncementDriverService {
         return new ApiResponse(announcementDrivers, true);
     }
 
-    public AnnouncementDriver getByIdAndActive(UUID announcement_id , boolean active){
+    public AnnouncementDriver getByIdAndActive(UUID announcement_id, boolean active) {
         return announcementDriverRepository.findByIdAndActive(announcement_id, active)
                 .orElseThrow(() -> new AnnouncementNotFoundException(DRIVER_ANNOUNCEMENT_NOT_FOUND));
     }
-    public AnnouncementDriver getByIdAndActiveAndDeletedFalse(UUID announcement_id , boolean active){
+
+    public AnnouncementDriver getByIdAndActiveAndDeletedFalse(UUID announcement_id, boolean active) {
         return announcementDriverRepository.findByIdAndActiveAndDeletedFalse(announcement_id, active)
                 .orElseThrow(() -> new AnnouncementNotFoundException(DRIVER_ANNOUNCEMENT_NOT_FOUND));
     }
-    public List<AnnouncementDriver> getByUserIdAndActiveAndDeletedFalse(UUID user_id , boolean active){
-        return announcementDriverRepository.findAllByUserIdAndActiveAndDeletedFalse(user_id,active);
+
+    public List<AnnouncementDriver> getByUserIdAndActiveAndDeletedFalse(UUID user_id, boolean active) {
+        return announcementDriverRepository.findAllByUserIdAndActiveAndDeletedFalse(user_id, active);
     }
 
-    public boolean existByUserIdAndActiveAndDeletedFalse(UUID userId){
+    public List<AnnouncementDriver> getByUserIdAndActiveAndParcelAndDeletedFalse(UUID user_id, boolean active) {
+        return announcementDriverRepository.findAllByUserIdAndActiveAndParcelTrueAndDeletedFalse(user_id, active);
+    }
+
+    public boolean existByUserIdAndActiveAndDeletedFalse(UUID userId) {
         return announcementDriverRepository.existsByUserIdAndActiveTrueAndDeletedFalse(userId);
     }
+
     private void fromAnnouncementDriver(AnnouncementDriverRegisterRequestDto announcement, User user, Car car) {
         AnnouncementDriver announcementDriver = AnnouncementDriver.from(announcement);
         announcementDriver.setCar(car);

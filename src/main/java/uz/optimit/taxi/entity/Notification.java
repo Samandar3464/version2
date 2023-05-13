@@ -46,6 +46,9 @@ public class Notification {
     @ManyToMany
     private List<Seat> carSeats;
 
+    @OneToOne
+    private PassengerParcel passengerParcels;
+
     @ManyToOne
     @JsonIgnore
     private User user;

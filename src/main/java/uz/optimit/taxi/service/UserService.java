@@ -64,8 +64,9 @@ public class UserService {
 //                .build());
         countMassageRepository.save(new CountMassage(userRegisterDto.getPhone(), 1, LocalDateTime.now()));
         User user = userRepository.save(from(userRegisterDto, verificationCode));
-        statusRepository.save(Status.builder().user(user).count(1L).stars(5L).build());
+        Status status = statusRepository.save(Status.builder().user(user).count(1L).stars(5L).build());
         familiarRepository.save(Familiar.fromUser(user));
+        user.setStatus(status);
         return new ApiResponse(SUCCESSFULLY, true, new TokenResponse(JwtGenerate.generateAccessToken(user), JwtGenerate.generateRefreshToken(user), fromUserToResponse(user)));
     }
 

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.optimit.taxi.entity.AnnouncementPassenger;
 import uz.optimit.taxi.entity.City;
+import uz.optimit.taxi.entity.PassengerParcel;
 
 import java.util.UUID;
 
@@ -32,6 +33,18 @@ public class AnnouncementPassengerResponseAnonymous {
                 .toCity(announcementPassenger.getToCity())
                 .price(announcementPassenger.getPrice())
                 .timeToTravel(announcementPassenger.getTimeToTravel().toString())
+                .build();
+    }
+    public static AnnouncementPassengerResponseAnonymous from(PassengerParcel passengerParcel) {
+        return AnnouncementPassengerResponseAnonymous
+                .builder()
+                .id(passengerParcel.getId())
+                .fromRegion(RegionResponseDto.from(passengerParcel.getFromRegion()))
+                .toRegion(RegionResponseDto.from(passengerParcel.getToRegion()))
+                .fromCity(passengerParcel.getFromCity())
+                .toCity(passengerParcel.getToCity())
+                .price(passengerParcel.getPrice())
+                .timeToTravel(passengerParcel.getTimeToSend().toString())
                 .build();
     }
 }

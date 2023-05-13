@@ -19,7 +19,7 @@ public class AnnouncementDriverActiveResponse {
     private String toCity;
     private double frontSeatPrice;
     private double backSeatPrice;
-    private boolean baggage;
+    private boolean parcel;
 
     public static AnnouncementDriverActiveResponse from(AnnouncementDriver announcementDriver) {
         return AnnouncementDriverActiveResponse.builder()
@@ -30,7 +30,7 @@ public class AnnouncementDriverActiveResponse {
                 .toCity(announcementDriver.getToCity()!=null ? announcementDriver.getToCity().getName():null)
                 .frontSeatPrice(announcementDriver.getFrontSeatPrice())
                 .backSeatPrice(announcementDriver.getBackSeatPrice())
-                .baggage(announcementDriver.isBaggage())
+                .parcel(announcementDriver.isParcel())
                 .build();
     }
 }

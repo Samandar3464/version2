@@ -64,7 +64,7 @@ public class PassengerParcel {
                 .fromLongitude(parcelRegisterRequestDto.getFromLongitude())
                 .toLatitude(parcelRegisterRequestDto.getToLatitude())
                 .toLongitude(parcelRegisterRequestDto.getToLongitude())
-                .timeToSend(parcelRegisterRequestDto.getTimeToTravel())
+                .timeToSend(parcelRegisterRequestDto.getTimeToSend())
                 .parcelInfo(parcelRegisterRequestDto.getParcelInfo())
                 .createdTime(LocalDateTime.now())
                 .price(parcelRegisterRequestDto.getPrice())

@@ -24,7 +24,7 @@ public class AnnouncementDriver {
 
     private double backSeatPrice;
 
-    private boolean baggage;
+    private boolean parcel;
 
     private boolean active;
 
@@ -57,7 +57,7 @@ public class AnnouncementDriver {
         return AnnouncementDriver.builder()
                 .frontSeatPrice(announcementRequestDto.getFrontSeatPrice())
                 .backSeatPrice(announcementRequestDto.getBackSeatPrice())
-                .baggage(announcementRequestDto.isBaggage())
+                .parcel(announcementRequestDto.isParcel())
                 .timeToDrive(announcementRequestDto.getTimeToDrive())
                 .info(announcementRequestDto.getInfo())
                 .createdTime(LocalDateTime.now())

@@ -11,7 +11,9 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AcceptDriverRequestDto {
+public class AcceptRequestDto {
     private UUID senderId;
     private List<UUID> seatIdList;
+    private UUID announcementPassengerId;
+    private UUID passengerParcelId;
 }

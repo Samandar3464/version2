@@ -14,7 +14,8 @@ public interface ParcelRepository extends JpaRepository<PassengerParcel , UUID> 
     Optional<PassengerParcel> getByIdAndActiveTrueAndDeletedFalse(UUID id);
     Optional<PassengerParcel> getByIdAndDeletedFalse(UUID id);
 
-    List<PassengerParcel> findAllByUserIdAndActiveAndDeletedFalse(UUID id, boolean b);
-
-    List<PassengerParcel> findAllByActiveTrueAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToTravelBetweenOrderByCreatedTimeDesc(Integer fromRegionId, Integer toRegionId, LocalDateTime time1, LocalDateTime time2);
+    List<PassengerParcel> findAllByUserIdAndActiveAndDeletedFalse(UUID user_id, boolean active);
+    Optional<PassengerParcel> findByUserIdAndIdAndActiveTrueAndDeletedFalse(UUID user_id, UUID id);
+    Optional<PassengerParcel> findByIdAndActiveAndDeletedFalse(UUID id, boolean active);
+    List<PassengerParcel> findAllByActiveTrueAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToSendBetweenOrderByCreatedTimeDesc(Integer fromRegionId, Integer toRegionId, LocalDateTime time1, LocalDateTime time2);
 }

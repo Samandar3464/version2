@@ -8,6 +8,7 @@ public class Constants {
     public static final String SUCCESSFULLY="SUCCESSFULLY";
     public static final String DRIVER_ANNOUNCEMENT_NOT_FOUND="DRIVER ANNOUNCEMENT NOT FOUND";
     public static final String PASSENGER_ANNOUNCEMENT_NOT_FOUND="PASSENGER ANNOUNCEMENT NOT FOUND";
+    public static final String PASSENGER_PARCEL_NOT_FOUND="PASSENGER PARCEL NOT FOUND";
     public static final String ANNOUNCEMENT_PASSENGER_ALREADY_EXIST="ANNOUNCEMENT PASSENGER ALREADY EXIST";
     public static final String ANNOUNCEMENT_DRIVER_ALREADY_EXIST="ANNOUNCEMENT DRIVER ALREADY EXIST";
     public static final String DELETED="DELETED";
@@ -30,9 +31,13 @@ public class Constants {
     public static final String REGION_NOT_FOUND="REGION NOT FOUND";
     public static final String CITY_NOT_FOUND="CITY NOT FOUND";
     public static final String YOU_COME_TO_MESSAGE_FROM_PASSENGER="SIZGA YO'LOVCHIDAN HABAR KELDI";
+    public static final String YOU_COME_TO_MESSAGE_FROM_PASSENGER_FOR_PARCEL="SIZGA YO'LOVCHIDAN POCHTA OLIB KETISH BO'YICHA HABAR KELDI";
+    public static final String YOU_COME_TO_MESSAGE_FROM_DRIVER_FOR_PARCEL="SIZGA HAYDOVCHIDAN POCHTA OLIB KETISH BO'YICHA HABAR KELDI";
     public static final String YOU_COME_TO_MESSAGE_FROM_DRIVER="SIZGA HAYDOVCHIDAN HABAR KELDI";
     public static final String DRIVER_AGREE="Haydovchi sizni olib ketishga rozi bo'ldi.";
+    public static final String DRIVER_AGREE_PARCEL="Haydovchi sizni pochtangizni olib ketishga rozi bo'ldi.";
     public static final String PASSENGER_AGREE="Yo'lovchi siz bilan ketishga rozi bo'ldi.";
+    public static final String PASSENGER_AGREE_PARCEL="Yo'lovchi pochtasini olib ketishingizga rozi bo'ldi.";
     public static final String CAR_HAS_ENOUGH_SEAT_BUT_NOT_SUIT_YOUR_CHOOSE="Siz habar jo'natgan haydovchining mashinasida yetarli joy bor lekin siz belgilangan joylar band qilindi , Agar maqul bolsa boshqa joy tanlang";
     public static final String FIREBASE_EXCEPTION="FIREBASE EXCEPTION";
     public static final String REFRESH_TOKEN_NOT_FOUND="FIREBASE EXCEPTION";

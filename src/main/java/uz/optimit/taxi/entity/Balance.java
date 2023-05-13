@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import uz.optimit.taxi.entity.User;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -18,9 +19,10 @@ public class Balance {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private boolean balance;
+    private double balance;
 
-    private boolean createdDate;
+    private LocalDateTime createdDate;
+
     @OneToOne
     private User user;
 }

@@ -10,7 +10,9 @@ import uz.optimit.taxi.entity.api.ApiResponse;
 import uz.optimit.taxi.exception.RecordNotFoundException;
 import uz.optimit.taxi.model.request.GetByFilter;
 import uz.optimit.taxi.model.request.ParcelRegisterRequestDto;
-import uz.optimit.taxi.model.response.*;
+import uz.optimit.taxi.model.response.ParcelResponse;
+import uz.optimit.taxi.model.response.ParcelResponseForList;
+import uz.optimit.taxi.model.response.UserResponseDto;
 import uz.optimit.taxi.repository.CityRepository;
 import uz.optimit.taxi.repository.ParcelRepository;
 import uz.optimit.taxi.repository.RegionRepository;
@@ -74,7 +76,7 @@ public class ParcelService {
 
     public ApiResponse getHistory() {
         User user = userService.checkUserExistByContext();
-        List<PassengerParcel> allByActive = parcelRepository.findAllByUserIdAndActiveAndDeletedFalse(user.getId(), false);
+        List<PassengerParcel> allByActive = getByUserId(user, false);
         List<ParcelResponse> response = new ArrayList<>();
         UserResponseDto userResponseDto = userService.fromUserToResponse(userService.checkUserExistById(user.getId()));
         allByActive.forEach(announcementPassenger -> response.add(ParcelResponse.from(announcementPassenger, userResponseDto)));
@@ -84,7 +86,7 @@ public class ParcelService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getByFilter(GetByFilter getByFilter) {
         List<PassengerParcel> byFilter = parcelRepository
-                .findAllByActiveTrueAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToTravelBetweenOrderByCreatedTimeDesc(
+                .findAllByActiveTrueAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToSendBetweenOrderByCreatedTimeDesc(
                         getByFilter.getFromRegionId(),
                         getByFilter.getToRegionId(),
                         getByFilter.getTime1(),
@@ -92,6 +94,14 @@ public class ParcelService {
         List<ParcelResponseForList> parcelResponses = new ArrayList<>();
         byFilter.forEach(obj -> parcelResponses.add(ParcelResponseForList.from(obj)));
         return new ApiResponse(parcelResponses, true);
+    }
+
+    public List<PassengerParcel> getByUserId(User user, boolean active) {
+        return parcelRepository.findAllByUserIdAndActiveAndDeletedFalse(user.getId(), active);
+    }
+
+    public PassengerParcel getById(UUID parcelId, boolean active) {
+        return parcelRepository.findByIdAndActiveAndDeletedFalse(parcelId, active).orElseThrow(() -> new RecordNotFoundException(PARCEL_NOT_FOUND));
     }
 
     private PassengerParcel fromRequest(ParcelRegisterRequestDto parcelRegisterRequestDto, User user) {
@@ -102,5 +112,13 @@ public class ParcelService {
         passengerParcel.setFromCity(cityRepository.getById(parcelRegisterRequestDto.getFromCityId()));
         passengerParcel.setToCity(cityRepository.getById(parcelRegisterRequestDto.getToCityId()));
         return passengerParcel;
+    }
+
+    public ApiResponse getPassengerParcels() {
+        User user = userService.checkUserExistByContext();
+        List<ParcelResponseForList> parcelResponses = new ArrayList<>();
+        parcelRepository.findAllByUserIdAndActiveAndDeletedFalse(user.getId(), true).forEach(obj ->
+                parcelResponses.add(ParcelResponseForList.from(obj)));
+        return new ApiResponse(parcelResponses, true);
     }
 }

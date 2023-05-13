@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface AnnouncementPassengerRepository extends JpaRepository<AnnouncementPassenger, UUID> {
 
-    List<AnnouncementPassenger> findAllByActiveTrueAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToTravelBetweenOrderByCreatedTimeDesc(Integer fromRegionId, Integer toRegionId, LocalDateTime timeToTravel, LocalDateTime timeToTravel2);
+    List<AnnouncementPassenger> findAllByActiveTrueAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToTravelAfterAndTimeToTravelBetweenOrderByCreatedTimeDesc(Integer fromRegion_id, Integer toRegion_id, LocalDateTime timeToTravel, LocalDateTime timeToTravel2, LocalDateTime timeToTravel3);
 
     Optional<AnnouncementPassenger> findByIdAndActive(UUID id, boolean active);
     Optional<AnnouncementPassenger> findByIdAndActiveAndDeletedFalse(UUID id, boolean active);
@@ -21,8 +21,8 @@ public interface AnnouncementPassengerRepository extends JpaRepository<Announcem
 
     boolean existsByUserIdAndActiveTrueAndDeletedFalse(UUID userId);
 
-    List<AnnouncementPassenger> findAllByActive(boolean active);
+    List<AnnouncementPassenger> findAllByActiveTrueAndTimeToTravelAfterOrderByCreatedTimeDesc(LocalDateTime timeToTravel);
 
-    List<AnnouncementPassenger> findAllByUserIdAndActive(UUID id, boolean active);
-    List<AnnouncementPassenger> findAllByUserIdAndActiveAndDeletedFalse(UUID id, boolean active);
+    List<AnnouncementPassenger> findAllByUserIdAndDeletedFalse(UUID id);
+    List<AnnouncementPassenger> findAllByUserIdAndActiveAndDeletedFalseAndTimeToTravelAfter(UUID user_id, boolean active, LocalDateTime timeToTravel);
 }

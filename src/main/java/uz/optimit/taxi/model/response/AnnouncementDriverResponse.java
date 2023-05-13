@@ -25,7 +25,7 @@ public class AnnouncementDriverResponse {
     private double frontSeatPrice;
     private double backSeatPrice;
     private String info;
-    private boolean baggage;
+    private boolean parcel;
     private List<String> carPhotoPath;
     private String color;
     private String carNumber;
@@ -33,7 +33,6 @@ public class AnnouncementDriverResponse {
     private String timeToDrive;
     private List<Seat> seatList;
     private List<Familiar> familiars;
-
     public static AnnouncementDriverResponse from(AnnouncementDriver announcementDriver) {
         return AnnouncementDriverResponse
                 .builder()
@@ -45,7 +44,7 @@ public class AnnouncementDriverResponse {
                 .frontSeatPrice(announcementDriver.getFrontSeatPrice())
                 .backSeatPrice(announcementDriver.getBackSeatPrice())
                 .info(announcementDriver.getInfo())
-                .baggage(announcementDriver.isBaggage())
+                .parcel(announcementDriver.isParcel())
                 .timeToDrive(announcementDriver.getTimeToDrive().toString())
                 .seatList(announcementDriver.getCar().getSeatList())
                 .build();

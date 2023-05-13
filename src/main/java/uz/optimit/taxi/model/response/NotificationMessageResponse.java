@@ -58,11 +58,27 @@ public class NotificationMessageResponse {
                 .data(new HashMap<>())
                 .build();
     }
+    public static NotificationMessageResponse afterAgreeRequestForPassenger_parcel(String token) {
+        return NotificationMessageResponse
+                .builder()
+                .receiverToken(token)
+                .title(DRIVER_AGREE_PARCEL)
+                .data(new HashMap<>())
+                .build();
+    }
     public static NotificationMessageResponse afterAgreeRequestForDriver(String token) {
         return NotificationMessageResponse
                 .builder()
                 .receiverToken(token)
                 .title(PASSENGER_AGREE)
+                .data(new HashMap<>())
+                .build();
+    }
+    public static NotificationMessageResponse afterAgreeRequestForDriver_parcel(String token) {
+        return NotificationMessageResponse
+                .builder()
+                .receiverToken(token)
+                .title(PASSENGER_AGREE_PARCEL)
                 .data(new HashMap<>())
                 .build();
     }

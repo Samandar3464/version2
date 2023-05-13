@@ -33,13 +33,11 @@ public class ParcelRegisterRequestDto {
 
      private double toLatitude;
 
-     private boolean baggage;
-
      private String parcelInfo;
 
      private double price;
 
      @JsonSerialize(using = LocalDateTimeSerializer.class)
      @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-     private LocalDateTime timeToTravel;
+     private LocalDateTime timeToSend;
 }

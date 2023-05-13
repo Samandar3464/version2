@@ -17,6 +17,7 @@ import uz.optimit.taxi.model.response.AnnouncementPassengerResponseAnonymous;
 import uz.optimit.taxi.model.response.UserResponseDto;
 import uz.optimit.taxi.repository.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -51,7 +52,7 @@ public class AnnouncementPassengerService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getPassengerListForAnonymousUser() {
         List<AnnouncementPassengerResponseAnonymous> passengerResponses = new ArrayList<>();
-        announcementPassengerRepository.findAllByActive(true).forEach(a ->
+        announcementPassengerRepository.findAllByActiveTrueAndTimeToTravelAfterOrderByCreatedTimeDesc(LocalDateTime.now().minusDays(1)).forEach(a ->
                 passengerResponses.add(AnnouncementPassengerResponseAnonymous.from(a)));
         return new ApiResponse(passengerResponses, true);
     }
@@ -80,7 +81,7 @@ public class AnnouncementPassengerService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getPassengerAnnouncements() {
         User user = userService.checkUserExistByContext();
-        List<AnnouncementPassenger> announcementPassengers = announcementPassengerRepository.findAllByUserIdAndActiveAndDeletedFalse(user.getId(), true);
+        List<AnnouncementPassenger> announcementPassengers = announcementPassengerRepository.findAllByUserIdAndActiveAndDeletedFalseAndTimeToTravelAfter(user.getId(), true, LocalDateTime.now().minusDays(1));
         List<AnnouncementPassengerResponseAnonymous> anonymousList = new ArrayList<>();
         announcementPassengers.forEach(obj -> anonymousList.add(AnnouncementPassengerResponseAnonymous.from(obj)));
         return new ApiResponse(anonymousList, true);
@@ -97,9 +98,10 @@ public class AnnouncementPassengerService {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse getByFilter(GetByFilter getByFilter) {
         List<AnnouncementPassenger> byFilter = announcementPassengerRepository
-                .findAllByActiveTrueAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToTravelBetweenOrderByCreatedTimeDesc(
+                .findAllByActiveTrueAndFromRegionIdAndToRegionIdAndDeletedFalseAndTimeToTravelAfterAndTimeToTravelBetweenOrderByCreatedTimeDesc(
                         getByFilter.getFromRegionId(),
                         getByFilter.getToRegionId(),
+                        LocalDateTime.now().minusDays(1),
                         getByFilter.getTime1(),
                         getByFilter.getTime2());
         List<AnnouncementPassengerResponseAnonymous> passengerResponses = new ArrayList<>();
@@ -109,7 +111,7 @@ public class AnnouncementPassengerService {
 
     public ApiResponse getHistory() {
         User user = userService.checkUserExistByContext();
-        List<AnnouncementPassenger> allByActive = announcementPassengerRepository.findAllByUserIdAndActiveAndDeletedFalse(user.getId(), false);
+        List<AnnouncementPassenger> allByActive = announcementPassengerRepository.findAllByUserIdAndDeletedFalse(user.getId());
         List<AnnouncementPassengerResponse> response = new ArrayList<>();
         UserResponseDto userResponseDto = userService.fromUserToResponse(userService.checkUserExistById(user.getId()));
         allByActive.forEach(announcementPassenger -> response.add(AnnouncementPassengerResponse.from(announcementPassenger, userResponseDto)));
@@ -136,8 +138,7 @@ public class AnnouncementPassengerService {
     }
 
     public List<AnnouncementPassenger> getAnnouncementPassenger(User passenger) {
-        return announcementPassengerRepository
-                .findAllByUserIdAndActiveAndDeletedFalse(passenger.getId(), true);
+        return announcementPassengerRepository.findAllByUserIdAndActiveAndDeletedFalseAndTimeToTravelAfter(passenger.getId(), true, LocalDateTime.now().minusDays(1));
     }
 
     private AnnouncementPassenger fromRequest(AnnouncementPassengerRegisterRequestDto announcementPassengerRegisterRequestDto, User user) {
@@ -147,7 +148,7 @@ public class AnnouncementPassengerService {
         announcementPassenger.setToRegion(regionRepository.getById(announcementPassengerRegisterRequestDto.getToRegionId()));
         announcementPassenger.setFromCity(cityRepository.getById(announcementPassengerRegisterRequestDto.getFromCityId()));
         announcementPassenger.setToCity(cityRepository.getById(announcementPassengerRegisterRequestDto.getToCityId()));
-        announcementPassenger.setPassengersList(familiarRepository.findByIdInAndActive(announcementPassengerRegisterRequestDto.getPassengersList(),true));
+        announcementPassenger.setPassengersList(familiarRepository.findByIdInAndActive(announcementPassengerRegisterRequestDto.getPassengersList(), true));
         return announcementPassenger;
     }
 }

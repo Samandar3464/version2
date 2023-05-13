@@ -47,7 +47,7 @@ public class AnnouncementPassengerController {
 
      @DeleteMapping("/deletePassengerAnnouncements/{id}")
      @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
-     public ApiResponse deleteDriverAnnouncement(@PathVariable UUID id) {
+     public ApiResponse deletePassengerAnnouncement(@PathVariable UUID id) {
           return announcementPassengerService.deletePassengerAnnouncement(id);
      }
 
@@ -59,7 +59,7 @@ public class AnnouncementPassengerController {
 
      @GetMapping("/getPassengerAnnouncementHistory")
      @PreAuthorize("hasAnyRole('HAYDOVCHI','YOLOVCHI','ADMIN')")
-     public ApiResponse getDriverAnnouncementHistory(){
+     public ApiResponse getPassengerAnnouncementHistory(){
           return announcementPassengerService.getHistory();
      }
 }

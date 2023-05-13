@@ -35,7 +35,7 @@ public class AnnouncementDriverRegisterRequestDto {
 
      private double backSeatPrice;
 
-     private boolean baggage;
+     private boolean parcel;
 
      private String info;
 

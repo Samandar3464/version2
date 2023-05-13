@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.optimit.taxi.entity.AnnouncementPassenger;
 import uz.optimit.taxi.entity.Notification;
+import uz.optimit.taxi.entity.PassengerParcel;
 import uz.optimit.taxi.entity.User;
 
 import java.util.UUID;
@@ -41,22 +42,41 @@ public class AllowedAnnouncementResponseForDriver {
 
     private UUID announcementId;
 
-    public static AllowedAnnouncementResponseForDriver fromForDriver(User user, Notification notification, AnnouncementPassenger announcementPassenger){
+
+    public static AllowedAnnouncementResponseForDriver fromForDriver(User user, Notification notification, AnnouncementPassenger announcementPassenger, PassengerParcel passengerParcel){
+        if (announcementPassenger!=null){
+            return AllowedAnnouncementResponseForDriver.builder()
+                    .userId(user.getId())
+                    .fullName(user.getFullName())
+                    .phone(user.getPhone())
+                    .announcementId(notification.getAnnouncementPassengerId())
+                    .notificationId(notification.getId())
+                    .fromRegion(announcementPassenger.getFromRegion().getName())
+                    .toRegion(announcementPassenger.getToRegion().getName())
+                    .fromCity(announcementPassenger.getFromCity().getName())
+                    .toCity(announcementPassenger.getToCity().getName())
+                    .fromLatitude(announcementPassenger.getFromLatitude())
+                    .fromLongitude(announcementPassenger.getFromLongitude())
+                    .toLatitude(announcementPassenger.getToLatitude())
+                    .toLongitude(announcementPassenger.getToLongitude())
+                    .build();
+        }
         return AllowedAnnouncementResponseForDriver.builder()
                 .userId(user.getId())
                 .fullName(user.getFullName())
                 .phone(user.getPhone())
                 .announcementId(notification.getAnnouncementPassengerId())
                 .notificationId(notification.getId())
-                .fromRegion(announcementPassenger.getFromRegion().getName())
-                .toRegion(announcementPassenger.getToRegion().getName())
-                .fromCity(announcementPassenger.getFromCity().getName())
-                .toCity(announcementPassenger.getToCity().getName())
-                .fromLatitude(announcementPassenger.getFromLatitude())
-                .fromLongitude(announcementPassenger.getFromLongitude())
-                .toLatitude(announcementPassenger.getToLatitude())
-                .toLongitude(announcementPassenger.getToLongitude())
+                .fromRegion(passengerParcel.getFromRegion().getName())
+                .toRegion(passengerParcel.getToRegion().getName())
+                .fromCity(passengerParcel.getFromCity().getName())
+                .toCity(passengerParcel.getToCity().getName())
+                .fromLatitude(passengerParcel.getFromLatitude())
+                .fromLongitude(passengerParcel.getFromLongitude())
+                .toLatitude(passengerParcel.getToLatitude())
+                .toLongitude(passengerParcel.getToLongitude())
                 .build();
+
     }
 
 }
