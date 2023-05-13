@@ -58,4 +58,16 @@ public class UserController {
      public ApiResponse setFireBaseToken(@RequestBody FireBaseTokenRegisterDto fireBaseTokenRegisterDto){
           return userService.saveFireBaseToken(fireBaseTokenRegisterDto);
      }
+     @PostMapping("/changePassword")
+     public ApiResponse changePassword(
+             @RequestParam String number,
+             @RequestParam String password) {
+          return userService.changePassword(number,password);
+     }
+
+     @PostMapping("/forgetPassword")
+     public ApiResponse forgetPassword(@RequestBody String number) {
+          return userService.forgetPassword(number);
+     }
+
 }

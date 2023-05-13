@@ -147,6 +147,29 @@ public class UserService {
         return new ApiResponse(SUCCESSFULLY, true);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse forgetPassword(String number){
+        User user = userRepository.findByPhone(number).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+        Integer verificationCode = verificationCodeGenerator();
+        System.out.println("Verification code: "+verificationCode);
+        service.sendSms(SmsModel.builder()
+                .mobile_phone(user.getPhone())
+                .message("DexTaxi. Tasdiqlash kodi: " + verificationCode +"Yo'lingiz bexatar  bo'lsin")
+                .from(4546)
+                .callback_url("http://0000.uz/test.php")
+                .build());
+        countMassageRepository.save(new CountMassage(user.getPhone(),1,LocalDateTime.now()));
+        return new ApiResponse("Verification code: "+verificationCode,true,user);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse changePassword(String number,String password){
+        User user = userRepository.findByPhone(number).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+        return new ApiResponse(user,true);
+    }
+
     public void addRoleDriver(List<Car> carList) {
         User user = userRepository.findByCarsIn(carList).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         List<Role> roles = user.getRoles();

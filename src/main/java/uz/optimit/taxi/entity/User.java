@@ -89,8 +89,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Notification> notifications;
 
-    @OneToOne(mappedBy = "user")
-    private Balance balance;
+//    @OneToOne(mappedBy = "user")
+//    private Balance balance;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
